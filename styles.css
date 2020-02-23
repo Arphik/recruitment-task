@@ -1,0 +1,95 @@
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.row, .first-row {
+  -ms-flex-preferred-size: 2vh;
+      flex-basis: 2vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1.5rem;
+}
+
+.row .id, .row .name, .row .city, .row .tincome, .row .aincome, .row .lincome, .first-row .id, .first-row .name, .first-row .city, .first-row .tincome, .first-row .aincome, .first-row .lincome {
+  padding: 5px;
+  border: 1px solid black;
+  line-height: 2.3rem;
+}
+
+.row .id, .first-row .id {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 5%;
+          flex: 1 5%;
+  text-align: right;
+}
+
+.row .name, .first-row .name {
+  -webkit-box-flex: 3;
+      -ms-flex: 3 25%;
+          flex: 3 25%;
+  padding-left: 5px;
+}
+
+.row .city, .first-row .city {
+  -webkit-box-flex: 2;
+      -ms-flex: 2 25%;
+          flex: 2 25%;
+  padding-left: 5px;
+}
+
+.row .tincome, .first-row .tincome {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 15%;
+          flex: 1 15%;
+}
+
+.row .aincome, .first-row .aincome {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 15%;
+          flex: 1 15%;
+}
+
+.row .lincome, .first-row .lincome {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 15%;
+          flex: 1 15%;
+}
+
+.hidden {
+  display: none;
+}
+
+.pages-cont {
+  width: 70vw;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.pages-cont .page {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 5%;
+          flex: 1 5%;
+  padding: 5px;
+  border: 1px solid black;
+  line-height: 2.3rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+@media (max-width: 575px) {
+  .row {
+    font-size: 0.6rem;
+  }
+}
+/*# sourceMappingURL=styles.css.map */

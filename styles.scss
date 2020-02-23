@@ -1,0 +1,60 @@
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+.row, .first-row{
+    flex-basis: 2vh;
+    display: flex;
+    font-size: 1.5rem;
+    .id, .name, .city, .tincome, .aincome, .lincome{
+        padding: 5px;
+        border: 1px solid black;
+        line-height: 2.3rem;
+    }
+    .id{
+        flex: 1 5%;
+        text-align: right;
+    }
+    .name{
+        flex: 3 25%;
+        padding-left: 5px;
+    }
+    .city{
+        flex: 2 25%;
+        padding-left: 5px;
+    }
+    .tincome{
+        flex: 1 15%;
+    }
+    .aincome{
+        flex: 1 15%;
+    }
+    .lincome{
+        flex: 1 15%;
+    }
+}
+.hidden{
+    display: none;
+}
+
+.pages-cont{
+    width: 70vw;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    .page{
+        flex: 1 5%;
+        padding: 5px;
+        border: 1px solid black;
+        line-height: 2.3rem;
+        text-align: center;
+        cursor: pointer;
+    }
+}
+
+@media(max-width: 575px){
+    .row{
+        font-size: 0.6rem;
+    }
+}
