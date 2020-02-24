@@ -3,7 +3,7 @@
     flex-direction: column;
 }
 
-.row, .first-row{
+.showed-row, .first-row{
     flex-basis: 2vh;
     display: flex;
     font-size: 1.5rem;
@@ -34,11 +34,11 @@
         flex: 1 15%;
     }
 }
-.hidden{
+.hidden-row{
     display: none;
 }
 
-.pages-cont{
+.pagination{
     width: 70vw;
     margin: 0 auto;
     display: flex;
