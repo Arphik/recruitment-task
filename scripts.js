@@ -12,7 +12,8 @@
 //         return this.companiesData;
 //     }
 // }
-var companiesData;
+
+var companiesData = new Array();
 
 function jsInit(order){
     //FIRST ROW
@@ -23,8 +24,10 @@ function jsInit(order){
     let aincome = document.createElement('div');
     let lincome = document.createElement('div');
     //FIRST ROW
-    companiesData = getData('https://recruitment.hal.skygate.io/companies');
-    sortResults(order);
+    getData('https://recruitment.hal.skygate.io/companies');
+    companiesData.then(() => {
+        sortResults(order);
+    });
 
     // id.onclick = getData(order);
     // nameEle = querySelector('.name');
@@ -40,7 +43,7 @@ function getData(url){
         return response.json();
     })
     .then((companies) => {
-        companies.forEach((company) => {
+        return companies.forEach((company) => {
             fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
                 .then((response) => {
                     return response.json();
@@ -61,14 +64,10 @@ function getData(url){
                     company.tincome = Round(sum, 2);
                     company.aincome = Round(ave, 2);
                     company.lincome = lastIncome;
+                    // console.log(company);
+                    companiesData.push(company);
                 });
         })
-    })
-    .then((companies) => {
-        return companies;
-        // console.log(companies);
-        // sortResults(company, order);
-        // showResults(company);
     });
 }
 
@@ -127,11 +126,11 @@ function showResults(results, pageRows = 10){
     let rowsTemplate = `
             <div class="first-row">
                 <div class="id" onclick="sortResults('id')">Id</div>
-                <div class="name">Name</div>
-                <div class="city">City</div>
-                <div class="tincome">Tot. Income</div>
-                <div class="aincome">Ave. Income</div>
-                <div class="lincome">Last Income</div>
+                <div class="name" onclick="sortResults('name')">Name</div>
+                <div class="city" onclick="sortResults('city')">City</div>
+                <div class="tincome" onclick="sortResults('tincom')">Tot. Income</div>
+                <div class="aincome" onclick="sortResults('aincome')">Ave. Income</div>
+                <div class="lincome" onclick="sortResults('lincome')">Last Income</div>
             </div>`;
     results.forEach((result) => {
         // CREATE ROW
