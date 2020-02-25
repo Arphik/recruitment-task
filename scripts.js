@@ -1,89 +1,95 @@
 
 // class Companies{
-//     constructor(){
-//         this.companiesData;
+//     constructor(data){
+//         this.companiesData = data;
 //     }
 
 //     setData(data){
 //         this.companiesData = data;
 //     }
 
-//     getCompanies(data){
+//     getData(){
 //         return this.companiesData;
 //     }
 // }
 
-// var companiesData = new Array();
+var companiesData;
 
-function jsInit(order){
-    let companiesData = getCompanies('https://recruitment.hal.skygate.io/companies');
-    companiesData.then(() => {
-        sortResults(companiesData, order);
+function jsInit(key){
+    // sortResults(order);
+    getData().then((array) => {
+        companiesData = array;
+        console.log('companiesData', companiesData);
+        sortResults(key, 'ascending', array);
     });
-    console.log('jsInit ', companiesData, order);
-    // companiesData.then((array) => {
-    // });
 }
 
- function getData(){
-     getCompanies()
-     .then((companies) => {
-
-     });
- }
-
-function getCompanies(){
-
-    return new Promise((resolve, reject) => {
-         const companies = fetch('https://recruitment.hal.skygate.io/companies')
-         .then((response) => {
-             return response.json();
-         });
-         companies ? resolve(companies) : reject(Error('No companies found'));
-    });
-    
-}
-
-function getIncomes(company){
-
-    // return new Promise((resolve, reject) => {
-         const incomes = fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
-        .then((response) => {
-            return response.json();
-        })
-    .then((companyIncomes) => {
-        // return new Promise(() => {
+function getData(){
+    return fetch('https://recruitment.hal.skygate.io/companies')
+    .then((response) => response.json()) 
+    .then((companies) => {
+        // calculate total, average and last income
+        function getTotalIncome(incomesArray){
             let sum = 0;
-            let ave;
-            let lastIncome = companyIncomes.incomes[0].value;
-            let lastDate = companyIncomes.incomes[0].date;
-            companyIncomes.incomes.forEach(el2 => {
-                sum += Number(el2.value);
-                if(el2.date > lastDate) { 
-                    lastDate = el2.date; 
-                    lastIncome = el2.value;
+            incomesArray.incomes.forEach((income) => {
+                sum += Number(income.value);
+            })
+            return Round(sum, 2);
+        }
+        function getLastIncome(incomesArray){
+            let lastIncome = incomesArray.incomes[0].value;
+            let lastDate = incomesArray.incomes[0].date;
+            incomesArray.incomes.forEach((incomes) => {
+                if(incomes.date > lastDate){
+                    lastDate = incomes.date;
+                    lastIncome = incomes.value;
                 }
             })
-            ave = sum/companyIncomes.incomes.length;
-            companies[i].tincome = Round(sum, 2);
-            companies[i].aincome = Round(ave, 2);
-            companies[i].lincome = lastIncome;
-            // companiesData.push(companies[i]);
-            // console.log('2 ', companies[i]);// tutaj sa w tablicy kwoty 
-        // });
-        // console.log('incomes ', Round(sum, 2), Round(ave, 2), lastIncome);
-        return {tincome: Round(sum, 2), aincome:Round(ave, 2), lincome:lastIncome };
+            return Number(lastIncome);
+        }
+        // calculate total, average and last income
+
+        return Promise.all(
+            companies.map((company) =>
+                fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
+                .then((response) => response.json())
+            )
+        )
+        .then((companyIncomes) => {
+            companies.forEach((company, index) => {
+                company.totalIncome = getTotalIncome(companyIncomes[index]);
+                company.averageIncome = Round(getTotalIncome(companyIncomes[index])/companyIncomes[index].incomes.length, 2);
+                company.lastIncome = getLastIncome(companyIncomes[index]);
+            });
+            
+            return companies;
+        });
+        
     })
-        resolve(company);
-    // });
 }
 
-function sortResults(array, sortKey){
-    let container = document.querySelector('.container');
-    let firstRow = document.querySelector('.first-row');
-    container.innerHTML = '';
-    container.append(firstRow);
+ function filterResults(){
+    console.log('companiesData', companiesData);
+    let keyWords = document.querySelector('.find-input').value.toUpperCase();
+    let newArray = companiesData.filter((item) => {
+        console.log("BEFORE");
+        if(item.id.toString().search(keyWords) !== -1 ||
+            item.name.toUpperCase().search(keyWords) !== -1 ||
+            item.city.toUpperCase().search(keyWords) !== -1 ||
+            item.totalIncome.toString().search(keyWords) !== -1 ||
+            item.averageIncome.toString().search(keyWords) !== -1 ||
+            item.lastIncome.toString().search(keyWords) !== -1){
+                console.log('keywords ', keyWords, ' compare result ' , item.id, item.id.toString().search(keyWords));
+                return item;
+            }
+            // for(key in item){
+            //     return item[key].toString().search(keyWords);
+            // }
+    });
+    sortResults('id', 'ascending', newArray);
+ }
 
+function sortResults(sortKey, order, array = transformRowsToArray()){
     function compare(a, b) {
         let itemA, itemB;
         switch(sortKey){
@@ -99,54 +105,68 @@ function sortResults(array, sortKey){
                 itemA = a.city;
                 itemB = b.city;
                 break;
-            case 'tincome':
-                itemA = a.tincome;
-                itemB = b.tincome;
+            case 'totalIncome':
+                itemA = a.totalIncome;
+                itemB = b.totalIncome;
                 break;
-            case 'aincome':
-                itemA = a.aincome;
-                itemB = b.aincome;
+            case 'averageIncome':
+                itemA = a.averageIncome;
+                itemB = b.averageIncome;
                 break;
-            case 'lincome':
-                itemA = a.lincome;
-                itemB = b.lincome;
+            case 'lastIncome':
+                itemA = a.lastIncome;
+                itemB = b.lastIncome;
                 break;
         }
-            if (itemA > itemB) {
-                return 1;
-            }
-            if (itemB > itemA) {
-                return -1;
-            }
-                return 0;
-        }
-    // console.log('sort', array);
-        // showResults(array.sort(compare));
+    let comparison = 0;
+    if (itemA > itemB) {
+        comparison = 1;
+    }
+    if (itemB > itemA) {
+        comparison = -1;
+    }
+    if(order === 'ascending')
+      return comparison;
+    else 
+        return comparison * (-1);
+    }
+    console.log('sorted array ', sortKey, array.sort(compare));
+    
+    showResults(array);
+
+    let sortButton = document.querySelector(`#${sortKey}`)
+    if(order === 'ascending'){
+        sortButton.setAttribute('onclick', `sortResults('${sortKey}', 'descending')`);
+    }
+    else {
+        sortButton.setAttribute('onclick', `sortResults('${sortKey}', 'ascending')`);
+    }
 }
 
 function showResults(results, pageRows = 10){
-    console.log('showResults', results);
     let container = document.querySelector('.container');
+    container.innerHTML = '';
+    console.log('results ', results);
 
     let rowsTemplate = `
             <div class="first-row">
-                <div class="id" onclick="sortResults('id')">Id</div>
-                <div class="name" onclick="sortResults('name')">Name</div>
-                <div class="city" onclick="sortResults('city')">City</div>
-                <div class="tincome" onclick="sortResults('tincom')">Tot. Income</div>
-                <div class="aincome" onclick="sortResults('aincome')">Ave. Income</div>
-                <div class="lincome" onclick="sortResults('lincome')">Last Income</div>
+                <div id="id" class="id" onclick="sortResults('id', 'ascending')">Id</div>
+                <div id="name" class="name" onclick="sortResults('name', 'ascending')">Name</div>
+                <div id="city" class="city" onclick="sortResults('city', 'ascending')">City</div>
+                <div id="totalIncome" class="total-income" onclick="sortResults('totalIncome', 'ascending')">Tot. Income</div>
+                <div id="averageIncome" class="average-income" onclick="sortResults('averageIncome', 'ascending')">Ave. Income</div>
+                <div id="lastIncome" class="last-income" onclick="sortResults('lastIncome', 'ascending')">Last Income</div>
             </div>`;
     results.forEach((result) => {
         // CREATE ROW
         rowsTemplate += `
-            <div class="hidden-row">
+            <div id="row" class="hidden-row">
                 <div class="id" onclick="sortResults()">${result.id}</div>
                 <div class="name">${result.name}</div>
                 <div class="city">${result.city}</div>
-                <div class="tincome">${result.tincome}</div>
-                <div class="aincome">${result.aincome}</div>
-                <div class="lincome">${result.lincome}</div>
+                <div class="total-income">${result.totalIncome}</div>
+                <div class="average-income">${result.averageIncome}</div>
+                <div class="last-income">${result.lastIncome}</div>
             </div>
         `;
         // CREATE COLUMNS //
@@ -155,13 +175,13 @@ function showResults(results, pageRows = 10){
     container.innerHTML = rowsTemplate;
     // console.log('container ', container);
     // CREATE PAGINATION BUTTONS
-    let pages;
-    if((results.length/pageRows) > Math.round(results/pageRows))
-        pages = results.length/pageRows+1;
-    pages = results.length/pageRows;
+    let pages = '';
+    // if((results.length/pageRows) > Math.round(results/pageRows))
+    //     pages = results.length/pageRows+1;
+    // pages = results.length/pageRows;
     for(let j = 0; j < (results.length/10); j++){
         pages += `
-            <div class="page" id="${j}" onclick="changePage(${j})">
+            <div class="page" onclick="changePage(${j})">
                 ${j+1}
             </div>`;
     }
@@ -173,13 +193,14 @@ function showResults(results, pageRows = 10){
 
 function changePage(firstRow = 0, rowsSeen = 10){
     let showedRows = document.querySelectorAll('.showed-row');
-    if(showedRows){
+    if(showedRows.length > 0){
         for(let i = 0; i < showedRows.length; i++){ 
             showedRows[i].setAttribute('class', 'hidden-row');
         }
     }
     let hiddenRows = document.querySelectorAll('.hidden-row');
-    if(hiddenRows === 0){
+    if(hiddenRows.length < 10) rowsSeen = hiddenRows.length;
+    if(hiddenRows.length > 0){
         for(let i = firstRow*10; i < firstRow*10+rowsSeen; i++){
             hiddenRows[i].setAttribute('class', 'showed-row');
         }
@@ -188,4 +209,21 @@ function changePage(firstRow = 0, rowsSeen = 10){
 function Round(n, k){
     let factor = Math.pow(10, k);
     return Math.round(n*factor)/factor;
+}
+
+function transformRowsToArray(){
+    let array = [];
+    let rows = document.querySelectorAll('#row');
+    rows.forEach((row) => {
+        array.push({
+            id: Number(row.children[0].innerHTML),
+            name: row.children[1].innerHTML,
+            city: row.children[2].innerHTML,
+            totalIncome: Number(row.children[3].innerHTML),
+            averageIncome: Number(row.children[4].innerHTML),
+            lastIncome: Number(row.children[5].innerHTML)
+        });
+    });
+    console.log('array from html ', array);
+    return array;
 }

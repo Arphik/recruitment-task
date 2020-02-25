@@ -1,60 +1,107 @@
-.container{
-    display: flex;
-    flex-direction: column;
-}
 
-.showed-row, .first-row{
-    flex-basis: 2vh;
-    display: flex;
-    font-size: 1.5rem;
-    .id, .name, .city, .tincome, .aincome, .lincome{
-        padding: 5px;
-        border: 1px solid black;
-        line-height: 2.3rem;
-    }
-    .id{
-        flex: 1 5%;
-        text-align: right;
-    }
-    .name{
-        flex: 3 25%;
-        padding-left: 5px;
-    }
-    .city{
-        flex: 2 25%;
-        padding-left: 5px;
-    }
-    .tincome{
-        flex: 1 15%;
-    }
-    .aincome{
-        flex: 1 15%;
-    }
-    .lincome{
-        flex: 1 15%;
-    }
-}
-.hidden-row{
-    display: none;
-}
+ div{
+     box-sizing: border-box;
+ }
 
-.pagination{
-    width: 70vw;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    .page{
-        flex: 1 5%;
-        padding: 5px;
-        border: 1px solid black;
-        line-height: 2.3rem;
-        text-align: center;
-        cursor: pointer;
-    }
-}
+// .search-form{
+//     width: 30vw;
+//     display: flex;
+//     .search-input{
+//         width: 20vw;
+//         font-size: 1.5rem;
+//     }
+//     .search-button{
+//         width: 10vw;
+//         font-size: 1.5rem;
+//     }
+// }
 
-@media(max-width: 575px){
-    .row{
-        font-size: 0.6rem;
+
+    .container{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .showed-row, .first-row{
+        flex-basis: 2vh;
+        display: flex;
+        font-size: 1.5rem;
+        .id, .name, .city, .total-income, .average-income, .last-income{
+            padding: 1%;
+            border: 1px solid black;
+            // line-height: 1rem;
+        }
+        .id{
+            flex-basis: 5%;
+            text-align: right;
+        }
+        .name{
+            flex-basis: 25%;
+            padding-left: 5px;
+        }
+        .city{
+            flex-basis: 25%;
+        }
+        .total-income{
+            flex-basis: 15%;
+        }
+        .average-income{
+            flex-basis: 15%;
+        }
+        .last-income{
+            flex-basis: 15%;
+        }
+    }
+    .hidden-row{
+        display: none;
+    }
+
+    .pagination{
+        width: 50vw;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        .page{
+            flex: 1 5%;
+            padding: 5px;
+            border: 1px solid black;
+            line-height: 1rem;
+            text-align: center;
+            cursor: pointer;
+        }
+    }
+
+
+@media(max-width: 675px) {
+
+    *{
+        display: block;
+    }
+
+    .search-form{
+        width: 10vw;
+        display: flex;
+        .search-input{
+            flex: 1;
+            font-size: 1.3rem;
+        }
+        .search-button{
+            flex: 1;
+            width: 20vw;
+        }
+    }
+    .container{
+        .first-row{
+            width: 100vw;
+            font-size: 1rem;
+        }
+        .showed-row{
+            width: 100vw;
+            font-size: 0.7rem;
+        }
+    }
+
+    .pagination{
+        width: 100%;
     }
 }
