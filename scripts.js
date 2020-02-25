@@ -8,70 +8,77 @@
 //         this.companiesData = data;
 //     }
 
-//     getData(data){
+//     getCompanies(data){
 //         return this.companiesData;
 //     }
 // }
 
-var companiesData = new Array();
+// var companiesData = new Array();
 
 function jsInit(order){
-    //FIRST ROW
-    let id = document.createElement('div');
-    let name = document.createElement('div');
-    let city = document.createElement('div');
-    let tincome = document.createElement('div');
-    let aincome = document.createElement('div');
-    let lincome = document.createElement('div');
-    //FIRST ROW
-    getData('https://recruitment.hal.skygate.io/companies');
+    let companiesData = getCompanies('https://recruitment.hal.skygate.io/companies');
     companiesData.then(() => {
-        sortResults(order);
+        sortResults(companiesData, order);
     });
-
-    // id.onclick = getData(order);
-    // nameEle = querySelector('.name');
-    // cityEle = querySelector('.city');
-    // tincomeEle = querySelector('.tincome');
-    // aincomeEle = querySelector('.aincome');
-    // lincomeEle = querySelector('.lincome');
+    console.log('jsInit ', companiesData, order);
+    // companiesData.then((array) => {
+    // });
 }
 
-function getData(url){
-    return fetch(url)
-    .then((response) => {
-        return response.json();
-    })
-    .then((companies) => {
-        return companies.forEach((company) => {
-            fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
-                .then((response) => {
-                    return response.json();
-                })
-                .then((companyIncomes) => {
-                    let sum = 0;
-                    let ave;
-                    let lastIncome = companyIncomes.incomes[0].value;
-                    let lastDate = companyIncomes.incomes[0].date;
-                    companyIncomes.incomes.forEach(el2 => {
-                        sum += Number(el2.value);
-                        if(el2.date > lastDate) { 
-                            lastDate = el2.date; 
-                            lastIncome = el2.value;
-                        }
-                    })
-                    ave = sum/companyIncomes.incomes.length;
-                    company.tincome = Round(sum, 2);
-                    company.aincome = Round(ave, 2);
-                    company.lincome = lastIncome;
-                    // console.log(company);
-                    companiesData.push(company);
-                });
+ function getData(){
+     getCompanies()
+     .then((companies) => {
+
+     });
+ }
+
+function getCompanies(){
+
+    return new Promise((resolve, reject) => {
+         const companies = fetch('https://recruitment.hal.skygate.io/companies')
+         .then((response) => {
+             return response.json();
+         });
+         companies ? resolve(companies) : reject(Error('No companies found'));
+    });
+    
+}
+
+function getIncomes(company){
+
+    // return new Promise((resolve, reject) => {
+         const incomes = fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
+        .then((response) => {
+            return response.json();
         })
-    });
+    .then((companyIncomes) => {
+        // return new Promise(() => {
+            let sum = 0;
+            let ave;
+            let lastIncome = companyIncomes.incomes[0].value;
+            let lastDate = companyIncomes.incomes[0].date;
+            companyIncomes.incomes.forEach(el2 => {
+                sum += Number(el2.value);
+                if(el2.date > lastDate) { 
+                    lastDate = el2.date; 
+                    lastIncome = el2.value;
+                }
+            })
+            ave = sum/companyIncomes.incomes.length;
+            companies[i].tincome = Round(sum, 2);
+            companies[i].aincome = Round(ave, 2);
+            companies[i].lincome = lastIncome;
+            // companiesData.push(companies[i]);
+            // console.log('2 ', companies[i]);// tutaj sa w tablicy kwoty 
+        // });
+        // console.log('incomes ', Round(sum, 2), Round(ave, 2), lastIncome);
+        return {tincome: Round(sum, 2), aincome:Round(ave, 2), lincome:lastIncome };
+    })
+        resolve(company);
+    // });
 }
 
-function sortResults(sortKey){
+function sortResults(array, sortKey){
     let container = document.querySelector('.container');
     let firstRow = document.querySelector('.first-row');
     container.innerHTML = '';
@@ -105,22 +112,20 @@ function sortResults(sortKey){
                 itemB = b.lincome;
                 break;
         }
-      if (itemA > itemB) {
-        return 1;
-    }
-      if (itemB > itemA) {
-        return -1;
-    }
-      return 0;
-    }
-    companiesData.then((array) => {
-        console.log('array ', array);
-        showResults(array.sort(compare));
-    });
+            if (itemA > itemB) {
+                return 1;
+            }
+            if (itemB > itemA) {
+                return -1;
+            }
+                return 0;
+        }
+    // console.log('sort', array);
+        // showResults(array.sort(compare));
 }
 
 function showResults(results, pageRows = 10){
-    console.log('results ', results);
+    console.log('showResults', results);
     let container = document.querySelector('.container');
 
     let rowsTemplate = `
@@ -134,7 +139,6 @@ function showResults(results, pageRows = 10){
             </div>`;
     results.forEach((result) => {
         // CREATE ROW
-        console.log(result);
         rowsTemplate += `
             <div class="hidden-row">
                 <div class="id" onclick="sortResults()">${result.id}</div>
@@ -175,8 +179,7 @@ function changePage(firstRow = 0, rowsSeen = 10){
         }
     }
     let hiddenRows = document.querySelectorAll('.hidden-row');
-    // console.log(hiddenRows);
-    if(hiddenRows){
+    if(hiddenRows === 0){
         for(let i = firstRow*10; i < firstRow*10+rowsSeen; i++){
             hiddenRows[i].setAttribute('class', 'showed-row');
         }
@@ -186,4 +189,3 @@ function Round(n, k){
     let factor = Math.pow(10, k);
     return Math.round(n*factor)/factor;
 }
-
