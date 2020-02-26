@@ -193,9 +193,7 @@ function changePage(firstRow = 0, rowsSeen = 10){
     if(hiddenRows.length < 10) rowsSeen = hiddenRows.length;
     if(hiddenRows.length > 0){
         for(let i = firstRow*10; i < firstRow*10+rowsSeen; i++){
-            console.log('hiddenRows length', hiddenRows.length);
             hiddenRows[i].setAttribute('class', 'showed-row row');
-            console.log('hiddenRows[i]', hiddenRows[i]);
         }
     }
 }
