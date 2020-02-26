@@ -1,22 +1,7 @@
 
-// class Companies{
-//     constructor(data){
-//         this.companiesData = data;
-//     }
-
-//     setData(data){
-//         this.companiesData = data;
-//     }
-
-//     getData(){
-//         return this.companiesData;
-//     }
-// }
-
 var companiesData;
 
 function jsInit(key){
-    // sortResults(order);
     getData().then((array) => {
         companiesData = array;
         sortResults(key, 'ascending', array);
@@ -78,9 +63,6 @@ function getData(){
             item.lastIncome.toString().search(keyWords) !== -1){
                 return item;
             }
-            // for(key in item){
-            //     return item[key].toString().search(keyWords);
-            // }
     });
     sortResults('id', 'ascending', newArray);
  }
