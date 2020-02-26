@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Companies</title>
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body onload="jsInit('id');">
-    <div class='search-form'>
-        <input class='search-input'  type="text" placeholder="key words...">
-        <button class='search-button' type="button" onclick="filterResults();">Search</button>
+    <div class='page-wrapper'>
+        <div class='search-form'>
+            <input class='search-input'  type="text" placeholder="key words...">
+            <button class='search-button' type="button" onclick="filterResults();">Search</button>
+        </div>
+        <div class="container"></div>
+        <div class="pagination"></div>
     </div>
-    <div class="container"></div>
-    <div class="pagination"></div>
     
  <script type="text/javascript" src="scripts.js"></script>
 </body>

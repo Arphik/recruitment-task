@@ -19,7 +19,6 @@ function jsInit(key){
     // sortResults(order);
     getData().then((array) => {
         companiesData = array;
-        console.log('companiesData', companiesData);
         sortResults(key, 'ascending', array);
     });
 }
@@ -69,17 +68,14 @@ function getData(){
 }
 
  function filterResults(){
-    console.log('companiesData', companiesData);
-    let keyWords = document.querySelector('.find-input').value.toUpperCase();
+    let keyWords = document.querySelector('.search-input').value.toUpperCase();
     let newArray = companiesData.filter((item) => {
-        console.log("BEFORE");
         if(item.id.toString().search(keyWords) !== -1 ||
             item.name.toUpperCase().search(keyWords) !== -1 ||
             item.city.toUpperCase().search(keyWords) !== -1 ||
             item.totalIncome.toString().search(keyWords) !== -1 ||
             item.averageIncome.toString().search(keyWords) !== -1 ||
             item.lastIncome.toString().search(keyWords) !== -1){
-                console.log('keywords ', keyWords, ' compare result ' , item.id, item.id.toString().search(keyWords));
                 return item;
             }
             // for(key in item){
@@ -90,6 +86,7 @@ function getData(){
  }
 
 function sortResults(sortKey, order, array = transformRowsToArray()){
+
     function compare(a, b) {
         let itemA, itemB;
         switch(sortKey){
@@ -130,11 +127,10 @@ function sortResults(sortKey, order, array = transformRowsToArray()){
     else 
         return comparison * (-1);
     }
-    console.log('sorted array ', sortKey, array.sort(compare));
-    
-    showResults(array);
+    let sortedArray = array.sort(compare);
+    showResults(sortedArray);
 
-    let sortButton = document.querySelector(`#${sortKey}`)
+    let sortButton = document.querySelector(`[data-header-id="${sortKey}"]`);
     if(order === 'ascending'){
         sortButton.setAttribute('onclick', `sortResults('${sortKey}', 'descending')`);
     }
@@ -146,39 +142,33 @@ function sortResults(sortKey, order, array = transformRowsToArray()){
 function showResults(results, pageRows = 10){
     let container = document.querySelector('.container');
     container.innerHTML = '';
-    console.log('results ', results);
 
     let rowsTemplate = `
-            <div class="first-row">
-                <div id="id" class="id" onclick="sortResults('id', 'ascending')">Id</div>
-                <div id="name" class="name" onclick="sortResults('name', 'ascending')">Name</div>
-                <div id="city" class="city" onclick="sortResults('city', 'ascending')">City</div>
-                <div id="totalIncome" class="total-income" onclick="sortResults('totalIncome', 'ascending')">Tot. Income</div>
-                <div id="averageIncome" class="average-income" onclick="sortResults('averageIncome', 'ascending')">Ave. Income</div>
-                <div id="lastIncome" class="last-income" onclick="sortResults('lastIncome', 'ascending')">Last Income</div>
+            <div class="header">
+                <div data-header-id="id" class="id cell" onclick="sortResults('id', 'ascending')">Id</div>
+                <div data-header-id="name" class="name cell" onclick="sortResults('name', 'ascending')">Name</div>
+                <div data-header-id="city" class="city cell" onclick="sortResults('city', 'ascending')">City</div>
+                <div data-header-id="totalIncome" class="total-income cell" onclick="sortResults('totalIncome', 'ascending')">Tot. Income</div>
+                <div data-header-id="averageIncome" class="average-income cell" onclick="sortResults('averageIncome', 'ascending')">Ave. Income</div>
+                <div data-header-id="lastIncome" class="last-income cell" onclick="sortResults('lastIncome', 'ascending')">Last Income</div>
             </div>`;
     results.forEach((result) => {
         // CREATE ROW
         rowsTemplate += `
-            <div id="row" class="hidden-row">
-                <div class="id" onclick="sortResults()">${result.id}</div>
-                <div class="name">${result.name}</div>
-                <div class="city">${result.city}</div>
-                <div class="total-income">${result.totalIncome}</div>
-                <div class="average-income">${result.averageIncome}</div>
-                <div class="last-income">${result.lastIncome}</div>
+            <div data-row class="hidden-row row">
+                <div class="id cell">${result.id}</div>
+                <div class="name cell">${result.name}</div>
+                <div class="city cell">${result.city}</div>
+                <div class="total-income cell">${result.totalIncome}</div>
+                <div class="average-income cell">${result.averageIncome}</div>
+                <div class="last-income cell">${result.lastIncome}</div>
             </div>
         `;
         // CREATE COLUMNS //
     });
-    // console.log('rowsTemplate ', rowsTemplate);
     container.innerHTML = rowsTemplate;
-    // console.log('container ', container);
     // CREATE PAGINATION BUTTONS
     let pages = '';
-    // if((results.length/pageRows) > Math.round(results/pageRows))
-    //     pages = results.length/pageRows+1;
-    // pages = results.length/pageRows;
     for(let j = 0; j < (results.length/10); j++){
         pages += `
             <div class="page" onclick="changePage(${j})">
@@ -198,11 +188,14 @@ function changePage(firstRow = 0, rowsSeen = 10){
             showedRows[i].setAttribute('class', 'hidden-row');
         }
     }
+    
     let hiddenRows = document.querySelectorAll('.hidden-row');
     if(hiddenRows.length < 10) rowsSeen = hiddenRows.length;
     if(hiddenRows.length > 0){
         for(let i = firstRow*10; i < firstRow*10+rowsSeen; i++){
-            hiddenRows[i].setAttribute('class', 'showed-row');
+            console.log('hiddenRows length', hiddenRows.length);
+            hiddenRows[i].setAttribute('class', 'showed-row row');
+            console.log('hiddenRows[i]', hiddenRows[i]);
         }
     }
 }
@@ -213,7 +206,7 @@ function Round(n, k){
 
 function transformRowsToArray(){
     let array = [];
-    let rows = document.querySelectorAll('#row');
+    let rows = document.querySelectorAll('[data-row]');
     rows.forEach((row) => {
         array.push({
             id: Number(row.children[0].innerHTML),
@@ -224,6 +217,5 @@ function transformRowsToArray(){
             lastIncome: Number(row.children[5].innerHTML)
         });
     });
-    console.log('array from html ', array);
     return array;
 }

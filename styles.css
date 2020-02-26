@@ -1,62 +1,69 @@
-div {
+* {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
 
-.container {
+html, body {
+  padding: 0;
+  margin: 0;
+  font-size: 2vw;
+}
+
+.page-wrapper {
+  width: 80vw;
+  margin: 0 auto;
+}
+
+.search-form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 20px;
 }
 
-.showed-row, .first-row {
-  -ms-flex-preferred-size: 2vh;
-      flex-basis: 2vh;
+.search-form .search-input, .search-form .search-button {
+  font-size: inherit;
+}
+
+.cell {
+  padding: 10px;
+  border: 1px solid gray;
+}
+
+.header, .row {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  font-size: 1.5rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
-.showed-row .id, .showed-row .name, .showed-row .city, .showed-row .total-income, .showed-row .average-income, .showed-row .last-income, .first-row .id, .first-row .name, .first-row .city, .first-row .total-income, .first-row .average-income, .first-row .last-income {
-  padding: 1%;
-  border: 1px solid black;
+.header .id, .row .id {
+  width: 6%;
 }
 
-.showed-row .id, .first-row .id {
-  -ms-flex-preferred-size: 5%;
-      flex-basis: 5%;
-  text-align: right;
+.header .name, .row .name {
+  width: 23%;
 }
 
-.showed-row .name, .first-row .name {
-  -ms-flex-preferred-size: 25%;
-      flex-basis: 25%;
-  padding-left: 5px;
+.header .city, .row .city {
+  width: 23%;
 }
 
-.showed-row .city, .first-row .city {
-  -ms-flex-preferred-size: 25%;
-      flex-basis: 25%;
+.header .total-income, .row .total-income {
+  width: 17%;
 }
 
-.showed-row .total-income, .first-row .total-income {
-  -ms-flex-preferred-size: 15%;
-      flex-basis: 15%;
+.header .average-income, .row .average-income {
+  width: 15%;
 }
 
-.showed-row .average-income, .first-row .average-income {
-  -ms-flex-preferred-size: 15%;
-      flex-basis: 15%;
-}
-
-.showed-row .last-income, .first-row .last-income {
-  -ms-flex-preferred-size: 15%;
-      flex-basis: 15%;
+.header .last-income, .row .last-income {
+  width: 17%;
 }
 
 .hidden-row {
@@ -64,7 +71,7 @@ div {
 }
 
 .pagination {
-  width: 50vw;
+  width: 60vw;
   margin: 0 auto;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -77,7 +84,7 @@ div {
   -webkit-box-flex: 1;
       -ms-flex: 1 5%;
           flex: 1 5%;
-  padding: 5px;
+  padding: 2% 0;
   border: 1px solid black;
   line-height: 1rem;
   text-align: center;
@@ -85,37 +92,77 @@ div {
 }
 
 @media (max-width: 675px) {
-  * {
-    display: block;
+  html, body {
+    padding: 0;
+    margin: 0;
+    font-size: 3.4vw;
   }
-  .search-form {
-    width: 10vw;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-  }
-  .search-form .search-input {
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
-    font-size: 1.3rem;
-  }
-  .search-form .search-button {
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
-    width: 20vw;
-  }
-  .container .first-row {
+  .page-wrapper {
     width: 100vw;
-    font-size: 1rem;
+  }
+  .container {
+    width: 100vw;
+    margin: 0 auto;
+  }
+  .container .header {
+    font-weight: 500;
   }
   .container .showed-row {
     width: 100vw;
-    font-size: 0.7rem;
+  }
+  .header .id, .row .id {
+    padding: 20px 0;
+    text-align: center;
+    width: 6%;
+  }
+  .header .name, .row .name {
+    width: 21%;
+  }
+  .header .city, .row .city {
+    width: 21%;
+  }
+  .header .total-income, .row .total-income {
+    width: 19%;
+  }
+  .header .average-income, .row .average-income {
+    width: 15%;
+  }
+  .header .last-income, .row .last-income {
+    width: 17%;
+  }
+  .pagination {
+    width: 100vw;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 676px) and (max-width: 1025px) {
+  .container {
+    margin: 0 auto;
+  }
+  .header .id, .row .id {
+    width: 6%;
+  }
+  .header .name, .row .name {
+    width: 22%;
+  }
+  .header .city, .row .city {
+    width: 22%;
+  }
+  .header .total-income, .row .total-income {
+    width: 17%;
+  }
+  .header .average-income, .row .average-income {
+    width: 15%;
+  }
+  .header .last-income, .row .last-income {
+    width: 17%;
   }
   .pagination {
     width: 100%;
+  }
+  .pagination .page {
+    padding: 2%;
   }
 }
 /*# sourceMappingURL=styles.css.map */
