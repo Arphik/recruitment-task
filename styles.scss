@@ -32,7 +32,6 @@ html, body{
 .header, .row {
     display: flex;
     justify-content: center;
-
     .id{
         width: 6%;
     }
@@ -51,6 +50,45 @@ html, body{
     .last-income{
         width: 17%;
     }
+}
+.header{
+    .cell{
+        cursor: pointer;
+        &:hover{
+            border-color: orange;
+        }
+    }
+}
+.cell__sorted{
+    background: rgba(168, 76, 0, 0.2);
+}
+.ascending-btn{
+    position: relative;
+}
+.ascending-btn:after{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 25%;
+    width: 0;
+    height: 0; 
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid red;
+    border-left: 10px solid transparent;
+}
+.descending-btn{
+    position: relative;
+}
+.descending-btn:after{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 25%;
+    width: 0;
+    height: 0; 
+    border-right: 10px solid transparent;
+    border-top: 10px solid red;
+    border-left: 10px solid transparent;
 }
 
 .hidden-row{
@@ -85,12 +123,10 @@ html, body{
     }
 
     .search-form{
-        // font-size: 1.1rem;
     }
     .container{
         width: 100vw;
         margin: 0 auto;
-        // font-size: 0.6rem;
         .header{
             font-weight: 500;
         }
@@ -130,11 +166,9 @@ html, body{
 @media(min-width: 676px) and (max-width: 1025px) {
 
     .search-form{
-        // font-size: 2rem;
     }
 
     .container{
-        // font-size: 1.2rem;
         margin: 0 auto;
     }
 
@@ -161,7 +195,6 @@ html, body{
 
     .pagination{
         width: 100%;
-        // font-size: 2rem;
         .page{
             padding: 2%;
         }

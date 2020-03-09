@@ -66,6 +66,50 @@ html, body {
   width: 17%;
 }
 
+.header .cell {
+  cursor: pointer;
+}
+
+.header .cell:hover {
+  border-color: orange;
+}
+
+.cell__sorted {
+  background: rgba(168, 76, 0, 0.2);
+}
+
+.ascending-btn {
+  position: relative;
+}
+
+.ascending-btn:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 25%;
+  width: 0;
+  height: 0;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid red;
+  border-left: 10px solid transparent;
+}
+
+.descending-btn {
+  position: relative;
+}
+
+.descending-btn:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 25%;
+  width: 0;
+  height: 0;
+  border-right: 10px solid transparent;
+  border-top: 10px solid red;
+  border-left: 10px solid transparent;
+}
+
 .hidden-row {
   display: none;
 }

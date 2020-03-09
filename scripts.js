@@ -1,38 +1,38 @@
-
-var companiesData;
-
-function jsInit(key){
-    getData().then((array) => {
-        companiesData = array;
-        sortResults(key, 'ascending', array);
-    });
+class CompaniesData{
+    constructor(){
+        this.wholeData = [];
+    }
+    setData(data){ this.wholeData = data; }
+    getData(){ return this.wholeData; }
 }
+var companiesData = new CompaniesData();
+function jsInit(){
+    getData().then((data) => {
+        companiesData.setData(data);
+        showResults(sortResults('id', 'ascending', companiesData.getData()));
+        document.querySelectorAll('[data-header-id]').forEach(el => el.onclick = changeButton);
+    });
+    console.log("FOREACH after ", );
+}
+function connectToOrigin(){
+    try{
+        return fetch('https://recruitment.hal.skygate.io/companies');
+    }catch(error){
 
+    }
+}
 function getData(){
-    return fetch('https://recruitment.hal.skygate.io/companies')
+    return connectToOrigin()
     .then((response) => response.json()) 
     .then((companies) => {
         // calculate total, average and last income
-        function getTotalIncome(incomesArray){
+        function getTotalIncome(incomesArray){  
             let sum = 0;
             incomesArray.incomes.forEach((income) => {
                 sum += Number(income.value);
             })
             return Round(sum, 2);
         }
-        function getLastIncome(incomesArray){
-            let lastIncome = incomesArray.incomes[0].value;
-            let lastDate = incomesArray.incomes[0].date;
-            incomesArray.incomes.forEach((incomes) => {
-                if(incomes.date > lastDate){
-                    lastDate = incomes.date;
-                    lastIncome = incomes.value;
-                }
-            })
-            return Number(lastIncome);
-        }
-        // calculate total, average and last income
-
         return Promise.all(
             companies.map((company) =>
                 fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
@@ -40,78 +40,61 @@ function getData(){
             )
         )
         .then((companyIncomes) => {
+            let mergedCompaniesIncomes = [];
             companies.forEach((company, index) => {
-                company.totalIncome = getTotalIncome(companyIncomes[index]);
-                company.averageIncome = Round(getTotalIncome(companyIncomes[index])/companyIncomes[index].incomes.length, 2);
-                company.lastIncome = getLastIncome(companyIncomes[index]);
+                let totalIncome = getTotalIncome(companyIncomes[index]);
+                let averageIncome = Round(getTotalIncome(companyIncomes[index])/companyIncomes[index].incomes.length, 2);
+                let lastIncome = sortResults('date', 'descending', companyIncomes[index].incomes)[0].value;//getLastIncome(companyIncomes[index]);
+                mergedCompaniesIncomes.push({...company, ...{totalIncome, averageIncome, lastIncome}});
             });
-            
-            return companies;
+            return mergedCompaniesIncomes;
         });
         
     })
 }
 
- function filterResults(){
+function filterResults(){
     let keyWords = document.querySelector('.search-input').value.toUpperCase();
-    let newArray = companiesData.filter((item) => {
-        if(item.id.toString().search(keyWords) !== -1 ||
-            item.name.toUpperCase().search(keyWords) !== -1 ||
-            item.city.toUpperCase().search(keyWords) !== -1 ||
-            item.totalIncome.toString().search(keyWords) !== -1 ||
-            item.averageIncome.toString().search(keyWords) !== -1 ||
-            item.lastIncome.toString().search(keyWords) !== -1){
-                return item;
-            }
-    });
-    sortResults('id', 'ascending', newArray);
- }
-
-function sortResults(sortKey, order, array = transformRowsToArray()){
-
-    function compare(a, b) {
-        let itemA, itemB;
-        switch(sortKey){
-            case 'id':
-                itemA = a.id;
-                itemB = b.id;
-                break;
-            case 'name':
-                itemA = a.name;
-                itemB = b.name;
-                break;
-            case 'city':
-                itemA = a.city;
-                itemB = b.city;
-                break;
-            case 'totalIncome':
-                itemA = a.totalIncome;
-                itemB = b.totalIncome;
-                break;
-            case 'averageIncome':
-                itemA = a.averageIncome;
-                itemB = b.averageIncome;
-                break;
-            case 'lastIncome':
-                itemA = a.lastIncome;
-                itemB = b.lastIncome;
-                break;
+    let newArray = companiesData.getData().filter((item) => {
+    if(item.id.toString().search(keyWords) !== -1 ||
+        item.name.toUpperCase().search(keyWords) !== -1 ||
+        item.city.toUpperCase().search(keyWords) !== -1 ||
+        item.totalIncome.toString().search(keyWords) !== -1 ||
+        item.averageIncome.toString().search(keyWords) !== -1 ||
+        item.lastIncome.toString().search(keyWords) !== -1){
+            return item;
         }
-    let comparison = 0;
-    if (itemA > itemB) {
-        comparison = 1;
-    }
-    if (itemB > itemA) {
-        comparison = -1;
-    }
-    if(order === 'ascending')
-      return comparison;
-    else 
-        return comparison * (-1);
-    }
-    let sortedArray = array.sort(compare);
-    showResults(sortedArray);
+    });
+    showResults(sortResults('id', 'ascending', newArray));
+}
 
+function sortResults(sortKey, order, array = companiesData.getData()){
+    function compare(a, b) {
+        let itemA = a[sortKey];
+        let itemB = b[sortKey];
+        let comparison = 0;
+        comparison = itemA > itemB ? 1 : 0;
+        comparison = itemA < itemB ? -1 : 0;
+        order === 'ascending' ? comparison *= 1 : comparison *= -1;
+        return comparison;
+    }
+    let sorted = array.sort(compare);
+    return sorted;
+}
+
+function changeButton(sortKey){ 
+    // find sorting button -> check if clicked button is it or different -> 
+    //if same toggle between ascending and descending
+    //if not the same toggle class from old and give ascending to new one
+    let oldSortingBtn;
+    try{
+        oldSortingBtn = document.querySelector('.ascending-btn') || document.querySelector('.descending-btn');
+    }catch(error){}
+    this.getAttribute('data-header-id') === oldSortingBtn.getAttribute('data-header-id') ? 
+        (this.classList.toggle('ascending-btn') ? this.classList.remove('descending-btn') : this.classList.add('descending-btn')) :
+        this.classList.add('ascending-btn');
+
+    let sortBtn;
     let sortButton = document.querySelector(`[data-header-id="${sortKey}"]`);
     if(order === 'ascending'){
         sortButton.setAttribute('onclick', `sortResults('${sortKey}', 'descending')`);
@@ -121,22 +104,22 @@ function sortResults(sortKey, order, array = transformRowsToArray()){
     }
 }
 
-function showResults(results, pageRows = 10){
+function showResults(results, rowsInPage = 10){
     let container = document.querySelector('.container');
     container.innerHTML = '';
 
-    let rowsTemplate = `
+    let firstRowTemplate = `
             <div class="header">
-                <div data-header-id="id" class="id cell" onclick="sortResults('id', 'ascending')">Id</div>
-                <div data-header-id="name" class="name cell" onclick="sortResults('name', 'ascending')">Name</div>
-                <div data-header-id="city" class="city cell" onclick="sortResults('city', 'ascending')">City</div>
-                <div data-header-id="totalIncome" class="total-income cell" onclick="sortResults('totalIncome', 'ascending')">Tot. Income</div>
-                <div data-header-id="averageIncome" class="average-income cell" onclick="sortResults('averageIncome', 'ascending')">Ave. Income</div>
-                <div data-header-id="lastIncome" class="last-income cell" onclick="sortResults('lastIncome', 'ascending')">Last Income</div>
+                <div data-header-id="id" class="id cell ascending-btn">Id</div>
+                <div data-header-id="name" class="name cell">Name</div>
+                <div data-header-id="city" class="city cell">City</div>
+                <div data-header-id="totalIncome" class="total-income cell">Tot. Income</div>
+                <div data-header-id="averageIncome" class="average-income cell">Ave. Income</div>
+                <div data-header-id="lastIncome" class="last-income cell">Last Income</div>
             </div>`;
-    results.forEach((result) => {
-        // CREATE ROW
-        rowsTemplate += `
+    container.insertAdjacentHTML('beforeend', firstRowTemplate);
+    results.forEach(result => {// CREATE ROWS
+        rowTemplate = `
             <div data-row class="hidden-row row">
                 <div class="id cell">${result.id}</div>
                 <div class="name cell">${result.name}</div>
@@ -144,40 +127,26 @@ function showResults(results, pageRows = 10){
                 <div class="total-income cell">${result.totalIncome}</div>
                 <div class="average-income cell">${result.averageIncome}</div>
                 <div class="last-income cell">${result.lastIncome}</div>
-            </div>
-        `;
-        // CREATE COLUMNS //
+            </div>`
+            container.insertAdjacentHTML('beforeend', rowTemplate);
     });
-    container.innerHTML = rowsTemplate;
     // CREATE PAGINATION BUTTONS
-    let pages = '';
     for(let j = 0; j < (results.length/10); j++){
-        pages += `
-            <div class="page" onclick="changePage(${j})">
+        document.querySelector('.pagination').insertAdjacentHTML('beforeend',
+            `<div class="page" onclick="changePage(${j*rowsInPage})">
                 ${j+1}
-            </div>`;
+            </div>`);
     }
-    let pagination = document.querySelector('.pagination');
-    pagination.innerHTML = pages;
     // CREATE PAGINATION BUTTONS
     changePage();
 }
 
 function changePage(firstRow = 0, rowsSeen = 10){
-    let showedRows = document.querySelectorAll('.showed-row');
-    if(showedRows.length > 0){
-        for(let i = 0; i < showedRows.length; i++){ 
-            showedRows[i].setAttribute('class', 'hidden-row');
-        }
-    }
-    
-    let hiddenRows = document.querySelectorAll('.hidden-row');
-    if(hiddenRows.length < 10) rowsSeen = hiddenRows.length;
-    if(hiddenRows.length > 0){
-        for(let i = firstRow*10; i < firstRow*10+rowsSeen; i++){
-            hiddenRows[i].setAttribute('class', 'showed-row row');
-        }
-    }
+    Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
+    .map(row => row.setAttribute('class', 'hidden-row'));
+
+    Array.prototype.slice.call(document.querySelectorAll('.hidden-row')) // Showing rows depending on start and how many
+    .slice(firstRow, firstRow+rowsSeen).map(row => row.setAttribute('class', 'showed-row row'));
 }
 function Round(n, k){
     let factor = Math.pow(10, k);
@@ -187,7 +156,7 @@ function Round(n, k){
 function transformRowsToArray(){
     let array = [];
     let rows = document.querySelectorAll('[data-row]');
-    rows.forEach((row) => {
+    rows.forEach(row => 
         array.push({
             id: Number(row.children[0].innerHTML),
             name: row.children[1].innerHTML,
@@ -195,7 +164,7 @@ function transformRowsToArray(){
             totalIncome: Number(row.children[3].innerHTML),
             averageIncome: Number(row.children[4].innerHTML),
             lastIncome: Number(row.children[5].innerHTML)
-        });
-    });
+        })
+    );
     return array;
 }
