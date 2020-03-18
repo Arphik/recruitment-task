@@ -12,7 +12,6 @@ function jsInit(){
         showResults(sortResults('id', 'ascending', companiesData.getData()));
         document.querySelectorAll('[data-header-id]').forEach(el => el.onclick = changeButton);
     });
-    console.log("FOREACH after ", );
 }
 function connectToOrigin(){
     try{
@@ -74,7 +73,7 @@ function sortResults(sortKey, order, array = companiesData.getData()){
         let itemB = b[sortKey];
         let comparison = 0;
         comparison = itemA > itemB ? 1 : 0;
-        comparison = itemA < itemB ? -1 : 0;
+        comparison = itemA < itemB ? -1 : 1;
         order === 'ascending' ? comparison *= 1 : comparison *= -1;
         return comparison;
     }
@@ -82,42 +81,23 @@ function sortResults(sortKey, order, array = companiesData.getData()){
     return sorted;
 }
 
-function changeButton(sortKey){ 
+function changeButton(){ 
     // find sorting button -> check if clicked button is it or different -> 
     //if same toggle between ascending and descending
     //if not the same toggle class from old and give ascending to new one
     let oldSortingBtn;
     try{
-        oldSortingBtn = document.querySelector('.ascending-btn') || document.querySelector('.descending-btn');
+        oldSortingBtn = document.querySelector('.ascending') || document.querySelector('.descending');
     }catch(error){}
-    this.getAttribute('data-header-id') === oldSortingBtn.getAttribute('data-header-id') ? 
-        (this.classList.toggle('ascending-btn') ? this.classList.remove('descending-btn') : this.classList.add('descending-btn')) :
-        this.classList.add('ascending-btn');
-
-    let sortBtn;
-    let sortButton = document.querySelector(`[data-header-id="${sortKey}"]`);
-    if(order === 'ascending'){
-        sortButton.setAttribute('onclick', `sortResults('${sortKey}', 'descending')`);
-    }
-    else {
-        sortButton.setAttribute('onclick', `sortResults('${sortKey}', 'ascending')`);
-    }
+    this.classList.toggle('ascending') ? this.classList.remove('descending') : this.classList.add('descending');
+    if(oldSortingBtn !== this) oldSortingBtn.classList.contains('ascending') ? 
+    oldSortingBtn.classList.remove('ascending') : oldSortingBtn.classList.remove('descending');
+    showResults(sortResults(this.getAttribute('data-header-id'), this.classList[2]));
 }
 
 function showResults(results, rowsInPage = 10){
-    let container = document.querySelector('.container');
-    container.innerHTML = '';
-
-    let firstRowTemplate = `
-            <div class="header">
-                <div data-header-id="id" class="id cell ascending-btn">Id</div>
-                <div data-header-id="name" class="name cell">Name</div>
-                <div data-header-id="city" class="city cell">City</div>
-                <div data-header-id="totalIncome" class="total-income cell">Tot. Income</div>
-                <div data-header-id="averageIncome" class="average-income cell">Ave. Income</div>
-                <div data-header-id="lastIncome" class="last-income cell">Last Income</div>
-            </div>`;
-    container.insertAdjacentHTML('beforeend', firstRowTemplate);
+    let dataRows = document.querySelector('.data-rows');
+    dataRows.innerHTML = '';
     results.forEach(result => {// CREATE ROWS
         rowTemplate = `
             <div data-row class="hidden-row row">
@@ -128,7 +108,7 @@ function showResults(results, rowsInPage = 10){
                 <div class="average-income cell">${result.averageIncome}</div>
                 <div class="last-income cell">${result.lastIncome}</div>
             </div>`
-            container.insertAdjacentHTML('beforeend', rowTemplate);
+            dataRows.insertAdjacentHTML('beforeend', rowTemplate);
     });
     // CREATE PAGINATION BUTTONS
     for(let j = 0; j < (results.length/10); j++){

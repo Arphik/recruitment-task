@@ -24,6 +24,13 @@ html, body{
     }
 }
 
+.container{
+    .data-rows{
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .cell {
     padding: 10px;
     border: 1px solid gray;
@@ -62,28 +69,28 @@ html, body{
 .cell__sorted{
     background: rgba(168, 76, 0, 0.2);
 }
-.ascending-btn{
+.ascending{
     position: relative;
 }
-.ascending-btn:after{
+.ascending:after{
     content: "";
     position: absolute;
     right: 0;
-    top: 25%;
+    top: 5%;
     width: 0;
     height: 0; 
     border-right: 10px solid transparent;
     border-bottom: 10px solid red;
     border-left: 10px solid transparent;
 }
-.descending-btn{
+.descending{ 
     position: relative;
 }
-.descending-btn:after{
+.descending:after{
     content: "";
     position: absolute;
     right: 0;
-    top: 25%;
+    top: 5%;
     width: 0;
     height: 0; 
     border-right: 10px solid transparent;

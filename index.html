@@ -11,7 +11,17 @@
             <input class='search-input'  type="text" placeholder="key words...">
             <button class='search-button' type="button" onclick="filterResults();">Search</button>
         </div>
-        <div class="container"></div>
+        <div class="container">
+            <div class="header">
+                <div data-header-id="id" class="id cell ascending">Id</div>
+                <div data-header-id="name" class="name cell">Name</div>
+                <div data-header-id="city" class="city cell">City</div>
+                <div data-header-id="totalIncome" class="total-income cell">Tot. Income</div>
+                <div data-header-id="averageIncome" class="average-income cell">Ave. Income</div>
+                <div data-header-id="lastIncome" class="last-income cell">Last Income</div>
+            </div>
+            <div class="data-rows"></div>
+        </div>
         <div class="pagination"></div>
     </div>
     

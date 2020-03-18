@@ -28,6 +28,16 @@ html, body {
   font-size: inherit;
 }
 
+.container .data-rows {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
 .cell {
   padding: 10px;
   border: 1px solid gray;
@@ -78,15 +88,15 @@ html, body {
   background: rgba(168, 76, 0, 0.2);
 }
 
-.ascending-btn {
+.ascending {
   position: relative;
 }
 
-.ascending-btn:after {
+.ascending:after {
   content: "";
   position: absolute;
   right: 0;
-  top: 25%;
+  top: 5%;
   width: 0;
   height: 0;
   border-right: 10px solid transparent;
@@ -94,15 +104,15 @@ html, body {
   border-left: 10px solid transparent;
 }
 
-.descending-btn {
+.descending {
   position: relative;
 }
 
-.descending-btn:after {
+.descending:after {
   content: "";
   position: absolute;
   right: 0;
-  top: 25%;
+  top: 5%;
   width: 0;
   height: 0;
   border-right: 10px solid transparent;
