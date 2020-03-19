@@ -11,6 +11,7 @@ function jsInit(){
         companiesData.setData(data);
         showResults(sortResults('id', 'ascending', companiesData.getData()));
         document.querySelectorAll('[data-header-id]').forEach(el => el.onclick = changeButton);
+        drawPagination();
     });
 }
 function connectToOrigin(){
@@ -65,6 +66,7 @@ function filterResults(){
         }
     });
     showResults(sortResults('id', 'ascending', newArray));
+    drawPagination();
 }
 
 function sortResults(sortKey, order, array = companiesData.getData()){
@@ -95,7 +97,7 @@ function changeButton(){
     showResults(sortResults(this.getAttribute('data-header-id'), this.classList[2]));
 }
 
-function showResults(results, rowsInPage = 10){
+function showResults(results){
     let dataRows = document.querySelector('.data-rows');
     dataRows.innerHTML = '';
     results.forEach(result => {// CREATE ROWS
@@ -110,15 +112,20 @@ function showResults(results, rowsInPage = 10){
             </div>`
             dataRows.insertAdjacentHTML('beforeend', rowTemplate);
     });
+    changePage();
+}
+
+function drawPagination(rowsInPage = 10){
+    console.log('draw pagi');
     // CREATE PAGINATION BUTTONS
-    for(let j = 0; j < (results.length/10); j++){
+    document.querySelector('.pagination').innerHTML = '';
+    for(let j = 0; j < (companiesData.getData().length/10); j++){
         document.querySelector('.pagination').insertAdjacentHTML('beforeend',
             `<div class="page" onclick="changePage(${j*rowsInPage})">
                 ${j+1}
             </div>`);
     }
     // CREATE PAGINATION BUTTONS
-    changePage();
 }
 
 function changePage(firstRow = 0, rowsSeen = 10){
@@ -133,18 +140,18 @@ function Round(n, k){
     return Math.round(n*factor)/factor;
 }
 
-function transformRowsToArray(){
-    let array = [];
-    let rows = document.querySelectorAll('[data-row]');
-    rows.forEach(row => 
-        array.push({
-            id: Number(row.children[0].innerHTML),
-            name: row.children[1].innerHTML,
-            city: row.children[2].innerHTML,
-            totalIncome: Number(row.children[3].innerHTML),
-            averageIncome: Number(row.children[4].innerHTML),
-            lastIncome: Number(row.children[5].innerHTML)
-        })
-    );
-    return array;
-}
+// function transformRowsToArray(){
+//     let array = [];
+//     let rows = document.querySelectorAll('[data-row]');
+//     rows.forEach(row => 
+//         array.push({
+//             id: Number(row.children[0].innerHTML),
+//             name: row.children[1].innerHTML,
+//             city: row.children[2].innerHTML,
+//             totalIncome: Number(row.children[3].innerHTML),
+//             averageIncome: Number(row.children[4].innerHTML),
+//             lastIncome: Number(row.children[5].innerHTML)
+//         })
+//     );
+//     return array;
+// }
