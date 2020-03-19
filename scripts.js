@@ -65,8 +65,9 @@ function filterResults(){
             return item;
         }
     });
+
     showResults(sortResults('id', 'ascending', newArray));
-    drawPagination();
+    drawPagination(newArray);
 }
 
 function sortResults(sortKey, order, array = companiesData.getData()){
@@ -115,11 +116,11 @@ function showResults(results){
     changePage();
 }
 
-function drawPagination(rowsInPage = 10){
+function drawPagination(array = companiesData.getData(), rowsInPage = 10){
     console.log('draw pagi');
     // CREATE PAGINATION BUTTONS
     document.querySelector('.pagination').innerHTML = '';
-    for(let j = 0; j < (companiesData.getData().length/10); j++){
+    for(let j = 0; j < (array.length/10); j++){
         document.querySelector('.pagination').insertAdjacentHTML('beforeend',
             `<div class="page" onclick="changePage(${j*rowsInPage})">
                 ${j+1}
