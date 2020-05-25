@@ -26,37 +26,37 @@ html, body{
 
 .container{
     .data-rows{
-        display: flex;
-        flex-direction: column;
+        // display: flex;
+        // flex-direction: column;
     }
 }
 
 .cell {
-    padding: 10px;
+    padding: 8px;
     border: 1px solid gray;
 }
 
 .header, .row {
-    display: flex;
-    justify-content: center;
-    .id{
-        width: 6%;
-    }
-    .name{
-        width: 23%;
-    }
-    .city{
-        width: 23%;
-    }
-    .total-income{
-        width: 17%;
-    }
-    .average-income{
-        width: 15%;
-    }
-    .last-income{
-        width: 17%;
-    }
+    display: grid;
+    grid-template-columns: 6% 23% 23% 17% 15% 17%;
+    // .id{
+    //     width: 6%;
+    // }
+    // .name{
+    //     width: 23%;
+    // }
+    // .city{
+    //     width: 23%;
+    // }
+    // .total-income{
+    //     width: 17%;
+    // }
+    // .average-income{
+    //     width: 15%;
+    // }
+    // .last-income{
+    //     width: 17%;
+    // }
 }
 .header{
     .cell{
