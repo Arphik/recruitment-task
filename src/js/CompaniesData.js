@@ -15,6 +15,8 @@ export default class CompaniesData{
     jsInit(){
         this.sortingBtn = document.querySelector('.ascending');
 
+        document.querySelector('.search__button').addEventListener('click', () => this.filterResults());
+
         document.querySelectorAll('[data-header-id]').forEach(el => el.addEventListener('click', (event) => {
             this.changeButton(event);
         }));
@@ -69,13 +71,13 @@ export default class CompaniesData{
     }
 
     filterResults(){
-        let keyWords = document.querySelector('.search-input').value.toString().toUpperCase();
-        let filteredCompanies = this.getData().filter(company => 
+        this.keyWords = document.querySelector('.search__input').value.toString().toUpperCase();
+        let filteredCompanies = this.wholeData.filter(company => 
             new String(Object.values(company))
             .toUpperCase()
             .includes(keyWords)
         );
-        this.showResults(sortResults('id', 'ascending', filteredCompanies));
+        this.showResults(this.sortResults('id', 'ascending', filteredCompanies));
         this.drawPagination(filteredCompanies);
     }
 
@@ -121,6 +123,7 @@ export default class CompaniesData{
 
     showResults(results){
         let dataRows = document.querySelector('.data-rows');
+        let loading = document.querySelector('.loading');
         dataRows.innerHTML = '';
         results.forEach(result => {// CREATE ROWS
             let rowTemplate = `
@@ -137,20 +140,26 @@ export default class CompaniesData{
         this.changePage();
     }
 
-    drawPagination(array = this.getData(), rowsInPage = 10){
+    drawPagination(array = this.wholeData, rowsInPage = 10){
         console.log('draw pagi');
+        let paginationSelect = document.querySelector('.pagination__select')
+        paginationSelect.addEventListener('change', (event) => {
+            this.changePage(parseInt(event.target.value));
+        });
         // CREATE PAGINATION BUTTONS
-        document.querySelector('.pagination').innerHTML = '';
+        paginationSelect.innerHTML = '';
         for(let j = 0; j < (array.length/10); j++){
-            document.querySelector('.pagination').insertAdjacentHTML('beforeend',
-                `<div class="page" onclick="changePage(${j*rowsInPage})">
+            paginationSelect.insertAdjacentHTML('beforeend',
+                `<option class="page">
                     ${j+1}
-                </div>`);
+                </option>`);
         }
+        console.log(document.querySelectorAll('.page'));
         // CREATE PAGINATION BUTTONS
     }
 
     changePage(firstRow = 0, rowsSeen = 10){
+        console.log('change page event', event);
         Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
         .map(row => row.setAttribute('class', 'hidden-row'));
 

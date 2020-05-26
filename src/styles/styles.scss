@@ -1,12 +1,24 @@
 
-* {
+*, :before, :after {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+    font: inherit;
+    color: inherit;
+    vertical-align: baseline;
     box-sizing: border-box;
 }
-
 html, body{
-    padding: 0;
-    margin: 0;
     font-size: 2vw;
+}
+:root{
+    --search__border--color: rgb(94, 110, 255);
+    --search__background--color: rgb(255, 244, 215);
+    --search__button-glass--color: rgb(0, 68, 255);
+
+    --cell__text--lineheight: 30px;
+    --cell__number--lineheight: 60px;
 }
 
 .page-wrapper {
@@ -16,104 +28,153 @@ html, body{
 
 .search-form{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin-bottom: 20px;
 
-    .search-input, .search-button {
+    .search__input, .search__button {
+        border: 2px solid var(--search__border--color);
         font-size: inherit;
+    }
+    .search__input{
+        flex: 5;
+        padding: 0 10px;
+        border-radius: 5px 0 0 5px;
+        background: var(--search__background--color);
+        ::placeholder{
+            color: black;
+        }
+    }
+    .search__button{
+        flex: 1;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+        .magnifying-glass{
+            font-size: 1em;
+            display: inline-block;
+            width: 0.4em;
+            box-sizing: content-box;
+            height: 0.4em;
+            border: 0.1em solid var(--search__button-glass--color);
+            position: relative;
+            border-radius: 0.35em;
+            &:after {
+                content: "";
+                display: inline-block;
+                position: absolute;
+                right: -0.25em;
+                bottom: -0.1em;
+                border-width: 0;
+                background: var(--search__button-glass--color);
+                width: 0.3em;
+                height: 0.08em;
+                transform: rotate(45deg);
+            }
+        }
+    }
+    .pagination{
+        flex: 2;
+        margin-left: 30%;
+        border: 4px solid var(--search__border--color);
+        .pagination__select{
+            width: 40%;
+            height: 100%;
+            option{
+                width: 60%;
+            }
+        }
+        span{
+            width: 20%;
+            height: 100%;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+            &:hover{
+                color: white;
+                background:  var(--search__border--color);
+            }
+        }
     }
 }
 
-.container{
-    .data-rows{
-        // display: flex;
-        // flex-direction: column;
+.content{
+    border: 6px solid rgb(177, 243, 255);
+}
+
+.loading{
+    width: 50%;
+    height: 60vh;
+    padding: 10px;
+    margin: 0 auto;
+    text-align: center;
+    .loading__image{
+        width: 50%;
+        height: 55%;
+        display: inline-block;
+        background: url('../assets/images/catching-data.png') no-repeat center/cover;
+    }
+    p{
+        margin: 4px;
+    }
+}
+
+.header, .row {
+    display: grid;
+    grid-template-columns: 6% 23% 23% 17% 15% 16%;
+}
+.header{
+    line-height: var(--cell__number--lineheight);
+    .cell{
+        cursor: pointer;
+        &:hover{
+            border--color: orange;
+        }
     }
 }
 
 .cell {
     padding: 8px;
     border: 1px solid gray;
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: var(--cell__text--lineheight);
 }
-
-.header, .row {
-    display: grid;
-    grid-template-columns: 6% 23% 23% 17% 15% 17%;
-    // .id{
-    //     width: 6%;
-    // }
-    // .name{
-    //     width: 23%;
-    // }
-    // .city{
-    //     width: 23%;
-    // }
-    // .total-income{
-    //     width: 17%;
-    // }
-    // .average-income{
-    //     width: 15%;
-    // }
-    // .last-income{
-    //     width: 17%;
-    // }
-}
-.header{
-    .cell{
-        cursor: pointer;
-        &:hover{
-            border-color: orange;
-        }
-    }
-}
-.cell__sorted{
-    background: rgba(168, 76, 0, 0.2);
-}
-.ascending{
-    position: relative;
-}
-.ascending:after{
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 5%;
-    width: 0;
-    height: 0; 
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid red;
-    border-left: 10px solid transparent;
-}
-.descending{ 
-    position: relative;
-}
-.descending:after{
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 5%;
-    width: 0;
-    height: 0; 
-    border-right: 10px solid transparent;
-    border-top: 10px solid red;
-    border-left: 10px solid transparent;
+.total-income, .average-income, .last-income{
+    line-height: var(--cell__number--lineheight);
 }
 
 .hidden-row{
     display: none;
 }
+.cell__sorted{
+    background: rgba(168, 76, 0, 0.2);
+}
 
-.pagination{
-    width: 60vw;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    .page{
-        flex: 1 5%;
-        padding: 2% 0;
-        border: 1px solid black;
-        line-height: 1rem;
-        text-align: center;
-        cursor: pointer;
+.ascending{
+    position: relative;
+    &:after{
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 5%;
+        width: 0;
+        height: 0; 
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid red;
+        border-left: 10px solid transparent;
+    }
+}
+.descending{ 
+    position: relative;
+    &:after{
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 5%;
+        width: 0;
+        height: 0; 
+        border-right: 10px solid transparent;
+        border-top: 10px solid red;
+        border-left: 10px solid transparent;
     }
 }
 
@@ -131,37 +192,15 @@ html, body{
 
     .search-form{
     }
-    .container{
+    .content{
         width: 100vw;
         margin: 0 auto;
         .header{
             font-weight: 500;
         }
-        .showed-row{
-            width: 100vw;
-        }
     }
     .header, .row {
-        .id{
-            padding: 20px 0;
-            text-align: center;
-            width: 6%;
-        }
-        .name{
-            width: 21%;
-        }
-        .city{
-            width: 21%;
-        }
-        .total-income{
-            width: 19%;
-        }
-        .average-income{
-            width: 15%;
-        }
-        .last-income{
-            width: 17%;
-        }
+        grid-template-columns: 6% 23% 23% 17% 15% 16%;
     }
 
     .pagination{
@@ -175,29 +214,16 @@ html, body{
     .search-form{
     }
 
-    .container{
+    .content{
         margin: 0 auto;
     }
 
+    .cell{
+        font-size: 1.2rem;
+    }
+
     .header, .row{
-        .id{
-            width: 6%;
-        }
-        .name{
-            width: 22%;
-        }
-        .city{
-            width: 22%;
-        }
-        .total-income{
-            width: 17%;
-        }
-        .average-income{
-            width: 15%;
-        }
-        .last-income{
-            width: 17%;
-        }
+        grid-template-columns: 6% 23% 23% 17% 15% 16%;
     }
 
     .pagination{

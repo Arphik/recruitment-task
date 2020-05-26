@@ -7,10 +7,17 @@
 <body>
     <div class='page-wrapper'>
         <div class='search-form'>
-            <input class='search-input'  type="text" placeholder="key words...">
-            <button class='search-button' type="button" onclick="filterResults();">Search</button>
+            <input class='search__input'  type="text" placeholder="key words...">
+            <button class='search__button' type="button">
+                <div class="magnifying-glass"></div>
+            </button>
+            <div class="pagination">
+                <span class="previous-page">&lt;</span>
+                <select class="pagination__select"></select>
+                <span class="next-page">&gt;</span>
+            </div>
         </div>
-        <div class="container">
+        <div class="content">
             <div class="header">
                 <div data-header-id="id" class="id cell ascending">Id</div>
                 <div data-header-id="name" class="name cell">Name</div>
@@ -19,9 +26,13 @@
                 <div data-header-id="averageIncome" class="average-income cell">Ave. Income</div>
                 <div data-header-id="lastIncome" class="last-income cell">Last Income</div>
             </div>
-            <div class="data-rows"></div>
+            <div class="data-rows">
+                <div class="loading">
+                    <div class="loading__image"></div>
+                    <p>We are catching data, thank you for patience</p>
+                </div>
+            </div>
         </div>
-        <div class="pagination"></div>
     </div>
     
 </body>
