@@ -14,6 +14,9 @@ export default class CompaniesData{
 
     jsInit(){
         this.sortingBtn = document.querySelector('.ascending');
+        this.paginationSelect = document.querySelector('.pagination__select');
+        this.prevBtn = document.querySelector('.previous-page');
+        this.nextBtn = document.querySelector('.next-page');
 
         document.querySelector('.search__button').addEventListener('click', () => this.filterResults());
 
@@ -28,37 +31,42 @@ export default class CompaniesData{
         });
     }
 
-    connectToOrigin(){
+    connectToOrigin(url){
         try{
-            return fetch('https://recruitment.hal.skygate.io/companies');
+            return fetch(url);
         }catch(error){
-
+            console.log("There was a connection error: ", error);
         }
     }
 
     getData(){
-        return this.connectToOrigin()
+        return this.connectToOrigin('https://recruitment.hal.skygate.io/companies')
         .then((response) => response.json())
         .then((companies) => {
             // calculate total, average and last income
             return Promise.all(
                 companies.map((company) =>
-                    fetch(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
+                this.connectToOrigin(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
                     .then((response) => response.json())
                 )
             )
             .then((companyIncomes) => {
                 let mergedCompaniesIncomes = [];
                 companies.forEach((company, index) => {
-                    let totalIncome = this.getTotalIncome(companyIncomes[index]);
-                    let averageIncome = this.Round(this.getTotalIncome(companyIncomes[index])/companyIncomes[index].incomes.length, 2);
-                    let lastIncome = this.sortResults('date', 'descending', companyIncomes[index].incomes)[0].value;//getLastIncome(companyIncomes[index]);
-                    mergedCompaniesIncomes.push({...company, ...{totalIncome, averageIncome, lastIncome}});
+                    mergedCompaniesIncomes.push({...company, ...this.countIncomes(companyIncomes, index)});
                 });
                 return mergedCompaniesIncomes;
             });
             
         })
+    }
+
+    countIncomes(companyIncomes, index){
+        return {
+        totalIncome: this.getTotalIncome(companyIncomes[index]),
+        averageIncome: this.Round(this.getTotalIncome(companyIncomes[index])/companyIncomes[index].incomes.length, 2),
+        lastIncome: this.sortResults('date', 'descending', companyIncomes[index].incomes)[0].value
+        }
     }
 
     getTotalIncome(incomesArray){  
@@ -140,14 +148,19 @@ export default class CompaniesData{
     }
 
     drawPagination(array = this.wholeData, rowsInPage = 10){
-        let paginationSelect = document.querySelector('.pagination__select')
-        paginationSelect.addEventListener('change', (event) => {
+        this.prevBtn.addEventListener('click', () => {
+            this.changePage(this.paginationSelect.value-1);
+        });
+        this.nextBtn.addEventListener('click', () => {
+            this.changePage(this.paginationSelect.value+1);
+        });;
+        this.paginationSelect.addEventListener('change', (event) => {
             this.changePage(parseInt(event.target.value));
         });
         // CREATE PAGINATION BUTTONS
-        paginationSelect.innerHTML = '';
+        this.paginationSelect.innerHTML = '';
         for(let j = 0; j < (array.length/10); j++){
-            paginationSelect.insertAdjacentHTML('beforeend',
+            this.paginationSelect.insertAdjacentHTML('beforeend',
                 `<option class="page">
                     ${j+1}
                 </option>`);
@@ -156,6 +169,9 @@ export default class CompaniesData{
     }
 
     changePage(firstRow = 0, rowsSeen = 10){
+        console.log("firstRow", firstRow);
+        if(firstRow == 1) this.prevBtn.classList.add('btnDisabled'); else this.prevBtn.classList.remove('btnDisabled');
+        if(firstRow == this.paginationSelect.length) this.prevBtn.classList.add('btnDisabled'); else this.prevBtn.classList.remove('btnDisabled');
         Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
         .map(row => row.setAttribute('class', 'hidden-row'));
 
