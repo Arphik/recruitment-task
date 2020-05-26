@@ -17,8 +17,13 @@ html, body{
     --search__background--color: rgb(255, 244, 215);
     --search__button-glass--color: rgb(0, 68, 255);
 
-    --cell__text--lineheight: 30px;
-    --cell__number--lineheight: 60px;
+    --content__border--color: rgba(0, 60, 255, 0.315);
+
+    --header__background--color: rgba(129, 61, 255, 0.25);
+    --cell__text--lineheight: 25px;
+    --cell__number--lineheight: 50px;
+    --cell__border--color: rgba(0,0,0,1);
+    --cell__background--color: rgba(129, 61, 255, 0.15);
 }
 
 .page-wrapper {
@@ -97,7 +102,7 @@ html, body{
 }
 
 .content{
-    border: 6px solid rgb(177, 243, 255);
+    border: 6px solid var(--content__border--color);
 }
 
 .loading{
@@ -122,8 +127,9 @@ html, body{
     grid-template-columns: 6% 23% 23% 17% 15% 16%;
 }
 .header{
-    line-height: var(--cell__number--lineheight);
+    background: var(--header__background--color);
     .cell{
+        line-height: var(--cell__number--lineheight);
         cursor: pointer;
         &:hover{
             border--color: orange;
@@ -131,9 +137,14 @@ html, body{
     }
 }
 
+.row{
+    &:nth-child(2n){
+        background: var(--cell__background--color);
+    }
+}
+
 .cell {
     padding: 8px;
-    border: 1px solid gray;
     font-size: 0.8rem;
     text-align: center;
     line-height: var(--cell__text--lineheight);

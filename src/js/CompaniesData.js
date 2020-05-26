@@ -23,7 +23,6 @@ export default class CompaniesData{
         
         this.getData().then((data) => {
             this.setData(data);
-             console.log(data);
             this.showResults(this.sortResults('id', 'ascending', data));
             this.drawPagination();
         });
@@ -141,7 +140,6 @@ export default class CompaniesData{
     }
 
     drawPagination(array = this.wholeData, rowsInPage = 10){
-        console.log('draw pagi');
         let paginationSelect = document.querySelector('.pagination__select')
         paginationSelect.addEventListener('change', (event) => {
             this.changePage(parseInt(event.target.value));
@@ -154,12 +152,10 @@ export default class CompaniesData{
                     ${j+1}
                 </option>`);
         }
-        console.log(document.querySelectorAll('.page'));
         // CREATE PAGINATION BUTTONS
     }
 
     changePage(firstRow = 0, rowsSeen = 10){
-        console.log('change page event', event);
         Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
         .map(row => row.setAttribute('class', 'hidden-row'));
 
