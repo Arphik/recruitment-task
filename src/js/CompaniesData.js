@@ -1,4 +1,5 @@
-import '../styles/styles.scss';
+import {connectToOrigin} from './utils';
+import {dataRowTemplate, pageOption} from './htmlTemplates';
 
 export default class CompaniesData{
 
@@ -10,50 +11,45 @@ export default class CompaniesData{
 
     setData(data){ this.wholeData = data; }
 
-    getData(){ return this.wholeData; }
+    fetchData(){ return this.wholeData; }
 
     jsInit(){
         this.sortingBtn = document.querySelector('.ascending');
         this.paginationSelect = document.querySelector('.pagination__select');
         this.prevBtn = document.querySelector('.previous-page');
         this.nextBtn = document.querySelector('.next-page');
+        this.searchInput = document.querySelector('.search__input');
+        this.headers = document.querySelectorAll('[data-header-id]');
+        this.searchButton = document.querySelector('.search__button');
 
-        document.querySelector('.search__button').addEventListener('click', () => this.filterResults());
-
-        document.querySelectorAll('[data-header-id]').forEach(el => el.addEventListener('click', (event) => {
+        this.searchButton.addEventListener('click', () => this.filterResults());
+        this.headers.forEach(el => el.addEventListener('click', (event) => {
             this.changeButton(event);
         }));
         
-        this.getData().then((data) => {
+        this.fetchData().then((data) => {
             this.setData(data);
             this.showResults(this.sortResults('id', 'ascending', data));
             this.drawPagination();
         });
     }
 
-    connectToOrigin(url){
-        try{
-            return fetch(url);
-        }catch(error){
-            console.log("There was a connection error: ", error);
-        }
-    }
 
-    getData(){
-        return this.connectToOrigin('https://recruitment.hal.skygate.io/companies')
+    fetchData(){
+        return connectToOrigin('https://recruitment.hal.skygate.io/companies')
         .then((response) => response.json())
         .then((companies) => {
             // calculate total, average and last income
             return Promise.all(
                 companies.map((company) =>
-                this.connectToOrigin(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
+                connectToOrigin(`https://recruitment.hal.skygate.io/incomes/${company.id}`)
                     .then((response) => response.json())
                 )
             )
             .then((companyIncomes) => {
                 let mergedCompaniesIncomes = [];
                 companies.forEach((company, index) => {
-                    mergedCompaniesIncomes.push({...company, ...this.countIncomes(companyIncomes, index)});
+                    mergedCompaniesIncomes.push({...company, ...this.countIncomes(companyIncomes[index])});
                 });
                 return mergedCompaniesIncomes;
             });
@@ -61,28 +57,31 @@ export default class CompaniesData{
         })
     }
 
-    countIncomes(companyIncomes, index){
+    countIncomes(companyIncomes){
+        let sum = this.getTotalIncome(companyIncomes.incomes)
         return {
-        totalIncome: this.getTotalIncome(companyIncomes[index]),
-        averageIncome: this.Round(this.getTotalIncome(companyIncomes[index])/companyIncomes[index].incomes.length, 2),
-        lastIncome: this.sortResults('date', 'descending', companyIncomes[index].incomes)[0].value
+        totalIncome: sum,
+        averageIncome: (sum/companyIncomes.incomes.length).toFixed(2),
+        lastIncome: this.sortResults('date', 'descending', companyIncomes.incomes)[0].value
         }
     }
 
-    getTotalIncome(incomesArray){  
-        let sum = 0;
-        incomesArray.incomes.forEach((income) => {
-            sum += Number(income.value);
-        })
-        return this.Round(sum, 2);
+    getTotalIncome(incomesObjects){  
+        return incomesObjects
+                .reduce((prev, curr) => {
+                    return prev + parseInt(curr.value);
+                }, 0)
+                .toFixed(2);
     }
 
     filterResults(){
-        this.keyWords = document.querySelector('.search__input').value.toString().toUpperCase();
+        this.searchWords.value.toUpperCase();
         let filteredCompanies = this.wholeData.filter(company => 
-            new String(Object.values(company))
-            .toUpperCase()
-            .includes(keyWords)
+            Object
+            .values(company)
+            .some((value) => {
+
+            })
         );
         this.showResults(this.sortResults('id', 'ascending', filteredCompanies));
         this.drawPagination(filteredCompanies);
@@ -98,8 +97,6 @@ export default class CompaniesData{
             order === 'ascending' ? comparison *= 1 : comparison *= -1;
             return comparison;
         }
-        if(!array.length)
-        console.log('array', array);
         let sorted = array.sort(compare);
         return sorted;
     }
@@ -117,15 +114,8 @@ export default class CompaniesData{
             this.sortingBtn = event.target;
             this.sortingBtn.classList.add('ascending');
         }
-
-
-        // this.sortingBtn = document.querySelector('.ascending') || document.querySelector('.descending');
-        // this.sortingBtn == event.target ? 
-        //     (this.sortingBtn.classList.toggle('ascending') ? this.sortingBtn.classList.remove('descending') : this.sortingBtn.classList.add('descending'))
-        //     :
-        //     if(this.sortingBtn.classList.toggle('ascending') this.sortingBtn.classList.remove('ascending'));
-
-        this.showResults(this.sortResults(this.sortingBtn.getAttribute('data-header-id'), this.sortingBtn.classList[2]));
+        let sorted = this.sortResults(this.sortingBtn.getAttribute('data-header-id'), this.sortingBtn.classList[2])
+        this.showResults(sorted);
     }
 
     showResults(results){
@@ -133,26 +123,20 @@ export default class CompaniesData{
         let loading = document.querySelector('.loading');
         dataRows.innerHTML = '';
         results.forEach(result => {// CREATE ROWS
-            let rowTemplate = `
-                <div data-row class="hidden-row row">
-                    <div class="id cell">${result.id}</div>
-                    <div class="name cell">${result.name}</div>
-                    <div class="city cell">${result.city}</div>
-                    <div class="total-income cell">${result.totalIncome}</div>
-                    <div class="average-income cell">${result.averageIncome}</div>
-                    <div class="last-income cell">${result.lastIncome}</div>
-                </div>`
-                dataRows.insertAdjacentHTML('beforeend', rowTemplate);
+                dataRows.insertAdjacentHTML('beforeend', dataRowTemplate(result));
         });
         this.changePage();
     }
 
     drawPagination(array = this.wholeData, rowsInPage = 10){
         this.prevBtn.addEventListener('click', () => {
-            this.changePage(this.paginationSelect.value-1);
+            this.changePage(parseInt(this.paginationSelect.value)-1);
+            console.log(parseInt(this.paginationSelect.value));
+            this.paginationSelect.value = parseInt(this.paginationSelect.value)-1;
         });
         this.nextBtn.addEventListener('click', () => {
-            this.changePage(this.paginationSelect.value+1);
+            this.changePage(parseInt(this.paginationSelect.value)+1);
+            this.paginationSelect.value = parseInt(this.paginationSelect.value)+1;
         });;
         this.paginationSelect.addEventListener('change', (event) => {
             this.changePage(parseInt(event.target.value));
@@ -160,49 +144,28 @@ export default class CompaniesData{
         // CREATE PAGINATION BUTTONS
         this.paginationSelect.innerHTML = '';
         for(let j = 0; j < (array.length/10); j++){
-            this.paginationSelect.insertAdjacentHTML('beforeend',
-                `<option class="page">
-                    ${j+1}
-                </option>`);
+            this.paginationSelect.insertAdjacentHTML('beforeend',pageOption(j))
         }
         // CREATE PAGINATION BUTTONS
     }
 
-    changePage(firstRow = 0, rowsSeen = 10){
-        console.log("firstRow", firstRow);
-        if(firstRow == 1) this.prevBtn.classList.add('btnDisabled'); else this.prevBtn.classList.remove('btnDisabled');
-        if(firstRow == this.paginationSelect.length) this.prevBtn.classList.add('btnDisabled'); else this.prevBtn.classList.remove('btnDisabled');
+    changePage(requestedPage = 1, rowsSeen = 10){
+        let firstRowLoaded = (requestedPage - 1) * 10;
+        let lastRowLoaed = firstRowLoaded + rowsSeen;
+        if(requestedPage == 1) 
+            this.prevBtn.classList.add('btnDisabled'); 
+        else 
+            this.prevBtn.classList.remove('btnDisabled');
+
+        if(requestedPage == this.paginationSelect.length) 
+            this.prevBtn.classList.add('btnDisabled'); 
+        else 
+            this.prevBtn.classList.remove('btnDisabled');
+
         Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
         .map(row => row.setAttribute('class', 'hidden-row'));
 
         Array.prototype.slice.call(document.querySelectorAll('.hidden-row')) // Showing rows depending on start and how many
-        .slice(firstRow, firstRow+rowsSeen).map(row => row.setAttribute('class', 'showed-row row'));
+        .slice(firstRowLoaded, lastRowLoaed).map(row => row.setAttribute('class', 'showed-row row'));
     }
-
-    Round(n, k){
-        let factor = Math.pow(10, k);
-        return Math.round(n*factor)/factor;
-    }
-
-
-
-
-
-
-
-    // function transformRowsToArray(){
-    //     let array = [];
-    //     let rows = document.querySelectorAll('[data-row]');
-    //     rows.forEach(row => 
-    //         array.push({
-    //             id: Number(row.children[0].innerHTML),
-    //             name: row.children[1].innerHTML,
-    //             city: row.children[2].innerHTML,
-    //             totalIncome: Number(row.children[3].innerHTML),
-    //             averageIncome: Number(row.children[4].innerHTML),
-    //             lastIncome: Number(row.children[5].innerHTML)
-    //         })
-    //     );
-    //     return array;
-    // }
 }

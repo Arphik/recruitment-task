@@ -78,6 +78,15 @@ html, body{
                 transform: rotate(45deg);
             }
         }
+        &:hover{
+            background: var(--search__border--color);
+            .magnifying-glass{
+                border: 0.1em solid white;
+                &:after {
+                    background: white;
+                }
+            }
+        }
     }
     .pagination{
         flex: 2;
@@ -199,6 +208,7 @@ html, body{
     }
 
     .search-form{
+        
         margin-bottom: 0;
     }
 }
