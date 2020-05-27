@@ -1,5 +1,5 @@
 import {connectToOrigin} from './utils';
-import { showResults, drawPagination} from './htmlTemplates';
+import { renderResults, renderPagination} from './htmlTemplates';
 
 export default class CompaniesData{
 
@@ -43,8 +43,8 @@ export default class CompaniesData{
             console.log(this.wholeData);
             let sorted = this.sortResults('id', 'ascending', this.wholeData);
             let sliced = this.slicedData(sorted);
-            showResults(sliced);
-            drawPagination();
+            renderResults(sliced, this.dataRows);
+            // renderPagination();
         });
     }
 
@@ -59,7 +59,7 @@ export default class CompaniesData{
         this.searchButton.addEventListener('click', () => {
             const filteredData = this.filterByKeyword(this.searchInput.value, this.wholeData);
             this.setFilteredData(filteredData);
-            showResults(this.slicedData(this.filteredData));
+            renderResults(this.slicedData(this.filteredData), this.dataRows);
         });
         
         this.headers.forEach(el => el.addEventListener('click', (event) => {
@@ -144,8 +144,8 @@ export default class CompaniesData{
 
     refreshResults(){
         this.filteredData = this.wholeData;
-        showResults(this.sortResults('id', 'ascending', filteredCompanies));
-        drawPagination(filteredCompanies);
+        renderResults(this.sortResults('id', 'ascending', filteredCompanies), this.dataRows);
+        renderPagination(filteredCompanies, this.paginationSelect);
     }
 
     sortResults(sortKey, order, array){
@@ -179,7 +179,7 @@ export default class CompaniesData{
             this.sortingBtn.classList.add('ascending');
         }
         let sorted = this.sortResults(this.sortingBtn.getAttribute('data-header-id'), this.sortingBtn.classList[2])
-        showResults(sorted);
+        renderResults(sorted, this.dataRows);
     }
 
     changePage(requestedPage = 1, rowsSeen = 10){

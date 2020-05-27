@@ -1,6 +1,6 @@
 
 function dataRowTemplate(result){
-    return `<div data-row class="hidden-row row">
+    return `<div data-row class="row">
                 <div class="id cell"><span>${result.id}</span></div>
                 <div class="name cell"><span>${result.name}</span></div>
                 <div class="city cell"><span>${result.city}</span></div>
@@ -22,11 +22,11 @@ export function renderResults(results, container){
     });
 }
 
-export function renderPagination(array = this.wholeData){
+export function renderPagination(array, container){
     // CREATE PAGINATION BUTTONS
-    this.paginationSelect.innerHTML = '';
+    container.innerHTML = '';
     for(let j = 0; j < (array.length/10); j++){
-        this.paginationSelect.insertAdjacentHTML('beforeend',pageOptionTemplate(j))
+        container.insertAdjacentHTML('beforeend', pageOptionTemplate(j))
     }
     // CREATE PAGINATION BUTTONS
 }
