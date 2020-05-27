@@ -22,16 +22,44 @@ export default class CompaniesData{
         this.headers = document.querySelectorAll('[data-header-id]');
         this.searchButton = document.querySelector('.search__button');
 
-        this.searchButton.addEventListener('click', () => this.filterResults());
-        this.headers.forEach(el => el.addEventListener('click', (event) => {
-            this.changeButton(event);
-        }));
+        this.addEventsListeners();
         
         this.fetchData().then((data) => {
             this.setData(data);
             this.showResults(this.sortResults('id', 'ascending', data));
             this.drawPagination();
         });
+    }
+
+    addEventsListeners(){
+        // Search event listeners
+        this.searchInput.addEventListener('keypress', () => this.filterResults());
+        this.headers.forEach(el => el.addEventListener('click', (event) => {
+            console.log(event.key);
+            if(event.key === 'Enter')
+                this.changeButton(event);
+        }));
+        this.searchButton.addEventListener('click', () => this.filterResults());
+        this.headers.forEach(el => el.addEventListener('click', (event) => {
+            this.changeButton(event);
+        })); // Search event listeners END
+
+        // Pagination event listeners
+        this.prevBtn.addEventListener('click', () => {
+            if(this.paginationSelect.value > 1){
+                this.changePage(parseInt(this.paginationSelect.value)-1);
+                this.paginationSelect.value = parseInt(this.paginationSelect.value)-1;
+            }
+        });
+        this.nextBtn.addEventListener('click', () => {
+            if(this.paginationSelect.value < this.paginationSelect.length){
+                this.changePage(parseInt(this.paginationSelect.value)+1);
+                this.paginationSelect.value = parseInt(this.paginationSelect.value)+1;
+            }
+        });
+        this.paginationSelect.addEventListener('change', (event) => {
+            this.changePage(parseInt(event.target.value));
+        });// Pagination event listeners END
     }
 
 
@@ -60,9 +88,9 @@ export default class CompaniesData{
     countIncomes(companyIncomes){
         let sum = this.getTotalIncome(companyIncomes.incomes)
         return {
-        totalIncome: sum,
-        averageIncome: (sum/companyIncomes.incomes.length).toFixed(2),
-        lastIncome: this.sortResults('date', 'descending', companyIncomes.incomes)[0].value
+            totalIncome: sum,
+            averageIncome: (sum/companyIncomes.incomes.length).toFixed(2),
+            lastIncome: this.sortResults('date', 'descending', companyIncomes.incomes)[0].value
         }
     }
 
@@ -127,22 +155,7 @@ export default class CompaniesData{
         this.changePage();
     }
 
-    drawPagination(array = this.wholeData, rowsInPage = 10){
-        this.prevBtn.addEventListener('click', () => {
-            if(this.paginationSelect.value > 1){
-                this.changePage(parseInt(this.paginationSelect.value)-1);
-                this.paginationSelect.value = parseInt(this.paginationSelect.value)-1;
-            }
-        });
-        this.nextBtn.addEventListener('click', () => {
-            if(this.paginationSelect.value < this.paginationSelect.length){
-                this.changePage(parseInt(this.paginationSelect.value)+1);
-                this.paginationSelect.value = parseInt(this.paginationSelect.value)+1;
-            }
-        });;
-        this.paginationSelect.addEventListener('change', (event) => {
-            this.changePage(parseInt(event.target.value));
-        });
+    drawPagination(array = this.wholeData){
         // CREATE PAGINATION BUTTONS
         this.paginationSelect.innerHTML = '';
         for(let j = 0; j < (array.length/10); j++){

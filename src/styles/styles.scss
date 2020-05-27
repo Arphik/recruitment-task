@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap');
+@import './variables.css';
+
 
 *, :before, :after {
 	margin: 0;
@@ -12,24 +15,11 @@
 html, body{
     font-size: 2vw;
 }
-:root{
-    --search__border--color: rgb(94, 110, 255);
-    --search__background--color: rgb(255, 244, 215);
-    --search__button-glass--color: rgb(0, 68, 255);
-    --search__radius-borders: 20px;
-
-    --content__border--color: rgba(0, 60, 255, 0.315);
-
-    --header__background--color: rgba(129, 61, 255, 0.25);
-    --cell__text--lineheight: 25px;
-    --cell__number--lineheight: 50px;
-    --cell__border--color: rgba(0,0,0,1);
-    --cell__background--color: rgba(129, 61, 255, 0.15);
-}
 
 .page-wrapper {
     width: 80vw;
     margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
 }
 
 .search-form{
@@ -44,6 +34,7 @@ html, body{
     .search__input{
         flex: 5;
         padding: 0 10px;
+        font-weight: 300;
         border-bottom-left-radius: var(--search__radius-borders);
         border-top-left-radius: var(--search__radius-borders);
         background: var(--search__background--color);
@@ -57,24 +48,25 @@ html, body{
         border-top-right-radius: var(--search__radius-borders);
         cursor: pointer;
         .magnifying-glass{
-            font-size: 1em;
+            font-size: 1.4em;
             display: inline-block;
             width: 0.4em;
             box-sizing: content-box;
             height: 0.4em;
             border: 0.1em solid var(--search__button-glass--color);
             position: relative;
+            left: -0.1em;
             border-radius: 0.35em;
             &:after {
                 content: "";
                 display: inline-block;
                 position: absolute;
-                right: -0.25em;
+                right: -0.2em;
                 bottom: -0.1em;
                 border-width: 0;
                 background: var(--search__button-glass--color);
                 width: 0.3em;
-                height: 0.08em;
+                height: 0.1em;
                 transform: rotate(45deg);
             }
         }
@@ -142,6 +134,7 @@ html, body{
     grid-template-columns: 6% 23% 23% 17% 15% 16%;
 }
 .header{
+    color: var(--header__font--color);
     background: var(--header__background--color);
     .cell{
         line-height: var(--cell__number--lineheight);
@@ -153,8 +146,15 @@ html, body{
 }
 
 .row{
+    color: var(--row__font--color);
+    font-weight: 300;
+    &:nth-child(2n-1){
+        background: var(--cell__background--1st-color);
+        color: var(--row__font--1st-color);
+    }
     &:nth-child(2n){
-        background: var(--cell__background--color);
+        background: var(--cell__background--2nd-color);
+        color: var(--row__font--2nd-color);
     }
 }
 
