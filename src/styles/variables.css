@@ -1,21 +1,21 @@
 
 :root{
-    --search__border--color: rgb(94, 110, 255);
-    --search__background--color: rgb(255, 249, 233);
-    --search__button-glass--color: rgb(0, 68, 255);
+    --search__border--color: #6930c3;
+    --search__background--color: rgb(255, 255, 255);
+    --search__button-glass--color: #6930c3;
     --search__radius-borders: 20px;
 
-    --content__border--color: rgba(0, 60, 255, 0.315);
+    --content__border--color: rgb(255, 255, 255);
 
-    --header__background--color: rgba(129, 61, 255, 0.25);
+    --header__background--color: #80ffdb;
     --cell__text--lineheight: 25px;
     --cell__number--lineheight: 50px;
-    --cell__border--color: rgba(0,0,0,1);
-    --cell__background--1st-color: rgba(129, 61, 255, 0.678);
-    --cell__background--2nd-color: rgba(129, 61, 255, 0.15);
+    --cell__border--color: rgba(255, 255, 255,1);
+    --cell__background--1st-color: #64dfdf;
+    --cell__background--2nd-color: #5e60ce;
 
     /* font colors */
-    --header__font--color: #8500f2;
-    --row__font--1st-color: #f0e4ff;
-    --row__font--2nd-color: #6a00f4;
+    --header__font--color: #7400b8;
+    --row__font--1st-color: #494bcf;
+    --row__font--2nd-color: #bbffff;
 }

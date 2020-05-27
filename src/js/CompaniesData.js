@@ -47,18 +47,18 @@ export default class CompaniesData{
         // Pagination event listeners
         this.prevBtn.addEventListener('click', () => {
             if(this.paginationSelect.value > 1){
-                this.changePage(parseInt(this.paginationSelect.value)-1);
-                this.paginationSelect.value = parseInt(this.paginationSelect.value)-1;
+                this.changePage(Number(this.paginationSelect.value)-1);
+                this.paginationSelect.value = Number(this.paginationSelect.value)-1;
             }
         });
         this.nextBtn.addEventListener('click', () => {
             if(this.paginationSelect.value < this.paginationSelect.length){
-                this.changePage(parseInt(this.paginationSelect.value)+1);
-                this.paginationSelect.value = parseInt(this.paginationSelect.value)+1;
+                this.changePage(Number(this.paginationSelect.value)+1);
+                this.paginationSelect.value = Number(this.paginationSelect.value)+1;
             }
         });
         this.paginationSelect.addEventListener('change', (event) => {
-            this.changePage(parseInt(event.target.value));
+            this.changePage(Number(event.target.value));
         });// Pagination event listeners END
     }
 
@@ -97,7 +97,7 @@ export default class CompaniesData{
     getTotalIncome(incomesObjects){  
         return incomesObjects
                 .reduce((prev, curr) => {
-                    return prev + parseInt(curr.value);
+                    return prev + Number(curr.value);
                 }, 0)
                 .toFixed(2);
     }
@@ -127,6 +127,10 @@ export default class CompaniesData{
         }
         let sorted = array.sort(compare);
         return sorted;
+    }
+
+    changeSortedCells(sortKey){
+        document.querySelectorAll(sortKey)
     }
 
     changeButton(event){ 

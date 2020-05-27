@@ -137,7 +137,9 @@ html, body{
     color: var(--header__font--color);
     background: var(--header__background--color);
     .cell{
+        text-align: left;
         line-height: var(--cell__number--lineheight);
+        border: 1px solid var(--content__border--color);
         cursor: pointer;
         &:hover{
             border--color: orange;
@@ -171,36 +173,33 @@ html, body{
 .hidden-row{
     display: none;
 }
-.cell__sorted{
+.cell--sorted{
     background: rgba(168, 76, 0, 0.2);
 }
 
 .ascending{
     position: relative;
-    &:after{
-        content: "";
+    &:before{
+        width: 30px;
+        height: 50%;
         position: absolute;
-        right: 0;
-        top: 5%;
-        width: 0;
-        height: 0; 
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid red;
-        border-left: 10px solid transparent;
+        right: 5px;
+        top: 15px;
+        content: "";
+        background: url('../assets/images/ascending-sort.png') no-repeat center/cover;
     }
 }
 .descending{ 
     position: relative;
     &:after{
-        content: "";
+        width: 30px;
+        height: 50%;
         position: absolute;
-        right: 0;
-        top: 5%;
-        width: 0;
-        height: 0; 
-        border-right: 10px solid transparent;
-        border-top: 10px solid red;
-        border-left: 10px solid transparent;
+        right: 5px;
+        top: -5px;
+        content: "";
+        background: url('../assets/images/ascending-sort.png') no-repeat center/cover;
+        transform: scaleY(-1);
     }
 }
 
