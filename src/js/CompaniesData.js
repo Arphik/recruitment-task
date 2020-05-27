@@ -33,7 +33,7 @@ export default class CompaniesData{
 
     addEventsListeners(){
         // Search event listeners
-        this.searchInput.addEventListener('keypress', () => this.filterResults());
+        this.searchInput.addEventListener('submit', () => this.filterResults());
         this.headers.forEach(el => el.addEventListener('click', (event) => {
             console.log(event.key);
             if(event.key === 'Enter')

@@ -187,6 +187,7 @@ html, body{
         top: 15px;
         content: "";
         background: url('../assets/images/ascending-sort.png') no-repeat center/cover;
+        transform: scaleY(-1);
     }
 }
 .descending{ 
@@ -196,10 +197,9 @@ html, body{
         height: 50%;
         position: absolute;
         right: 5px;
-        top: -5px;
+        top: 15px;
         content: "";
         background: url('../assets/images/ascending-sort.png') no-repeat center/cover;
-        transform: scaleY(-1);
     }
 }
 
