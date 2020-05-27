@@ -138,13 +138,14 @@ html, body{
     background: var(--header__background--color);
     .cell{
         text-align: left;
-        line-height: var(--cell__number--lineheight);
+        height: 8vh;
         border: 1px solid var(--content__border--color);
         cursor: pointer;
     }
 }
 
 .row{
+    height: 8vh;
     color: var(--row__font--color);
     font-weight: 300;
     &:nth-child(2n-1){
@@ -160,12 +161,11 @@ html, body{
 .cell {
     padding: 8px;
     font-size: 0.8rem;
-    text-align: center;
-    line-height: var(--cell__text--lineheight);
+    align-self: center;
 }
-.total-income, .average-income, .last-income{
-    line-height: var(--cell__number--lineheight);
-}
+// .city, .total-income, .average-income, .last-income{
+//     line-height: var(--cell__number--lineheight);
+// }
 
 .hidden-row{
     display: none;
@@ -184,7 +184,6 @@ html, body{
         top: 15px;
         content: "";
         background: url('../assets/images/ascending-sort.png') no-repeat center/cover;
-        transform: scaleY(-1);
     }
 }
 .descending{ 
@@ -197,6 +196,7 @@ html, body{
         top: 15px;
         content: "";
         background: url('../assets/images/ascending-sort.png') no-repeat center/cover;
+        transform: scaleY(-1);
     }
 }
 

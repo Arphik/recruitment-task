@@ -1,15 +1,26 @@
 import {connectToOrigin} from './utils';
-import {dataRowTemplate, pageOption} from './htmlTemplates';
+import { showResults, drawPagination} from './htmlTemplates';
 
 export default class CompaniesData{
 
     constructor(){
         this.wholeData = [];
+        this.filteredData;
         this.sortingBtn;
+        this.pageNumber = 1;
+        this.pageSize = 10;
          this.jsInit();
     }
 
-    setData(data){ this.wholeData = data; }
+    setData(data){
+        this.wholeData = data;
+        this.filteredData = data;
+    }
+
+    setFilteredData(data){
+        this.wholeData = data;
+        this.filteredData = data;
+    }
 
     fetchData(){ return this.wholeData; }
 
@@ -21,25 +32,36 @@ export default class CompaniesData{
         this.searchInput = document.querySelector('.search__input');
         this.headers = document.querySelectorAll('[data-header-id]');
         this.searchButton = document.querySelector('.search__button');
+        this.dataRows = document.querySelector('.data-rows');
+        this.loading = document.querySelector('.loading');
 
         this.addEventsListeners();
         
         this.fetchData().then((data) => {
             this.setData(data);
-            this.showResults(this.sortResults('id', 'ascending', data));
-            this.drawPagination();
+            this.setFilteredData(data);
+            console.log(this.wholeData);
+            let sorted = this.sortResults('id', 'ascending', this.wholeData);
+            let sliced = this.slicedData(sorted);
+            showResults(sliced);
+            drawPagination();
         });
     }
 
     addEventsListeners(){
         // Search event listeners
-        this.searchInput.addEventListener('submit', () => this.filterResults());
-        this.headers.forEach(el => el.addEventListener('click', (event) => {
-            console.log(event.key);
-            if(event.key === 'Enter')
-                this.changeButton(event);
-        }));
-        this.searchButton.addEventListener('click', () => this.filterResults());
+        // this.searchInput.addEventListener('submit', () => this.filterResults());
+        // this.headers.forEach(el => el.addEventListener('click', (event) => {
+        //     console.log(event.key);
+        //     event.preventDefault();
+        //         this.changeButton(event);
+        // }));
+        this.searchButton.addEventListener('click', () => {
+            const filteredData = this.filterByKeyword(this.searchInput.value, this.wholeData);
+            this.setFilteredData(filteredData);
+            showResults(this.slicedData(this.filteredData));
+        });
+        
         this.headers.forEach(el => el.addEventListener('click', (event) => {
             this.changeButton(event);
         })); // Search event listeners END
@@ -102,20 +124,31 @@ export default class CompaniesData{
                 .toFixed(2);
     }
 
-    filterResults(){
-        const searchKeyword = this.searchInput.value;
-        let filteredCompanies = this.wholeData.filter(company => 
+    slicedData(filteredData, pageNumber = 1, pageSize = 10){
+        let firstRow = (pageNumber-1)*pageSize;
+        let lastRow = firstRow + pageSize;
+        return filteredData.slice(firstRow, lastRow);
+    }
+
+    filterByKeyword(searchKeyword, data){
+        searchKeyword = this.searchInput.value;
+        this.setFilteredData()
+        return data.filter(company => 
             Object
             .values(company)
             .some((value) => {
                 return String(value).toUpperCase().includes(searchKeyword.toUpperCase());
             })
         );
-        this.showResults(this.sortResults('id', 'ascending', filteredCompanies));
-        this.drawPagination(filteredCompanies);
     }
 
-    sortResults(sortKey, order, array = this.wholeData){
+    refreshResults(){
+        this.filteredData = this.wholeData;
+        showResults(this.sortResults('id', 'ascending', filteredCompanies));
+        drawPagination(filteredCompanies);
+    }
+
+    sortResults(sortKey, order, array){
         function compare(a, b) {
             let itemA = a[sortKey];
             let itemB = b[sortKey];
@@ -146,26 +179,7 @@ export default class CompaniesData{
             this.sortingBtn.classList.add('ascending');
         }
         let sorted = this.sortResults(this.sortingBtn.getAttribute('data-header-id'), this.sortingBtn.classList[2])
-        this.showResults(sorted);
-    }
-
-    showResults(results){
-        let dataRows = document.querySelector('.data-rows');
-        let loading = document.querySelector('.loading');
-        dataRows.innerHTML = '';
-        results.forEach(result => {// CREATE ROWS
-                dataRows.insertAdjacentHTML('beforeend', dataRowTemplate(result));
-        });
-        this.changePage();
-    }
-
-    drawPagination(array = this.wholeData){
-        // CREATE PAGINATION BUTTONS
-        this.paginationSelect.innerHTML = '';
-        for(let j = 0; j < (array.length/10); j++){
-            this.paginationSelect.insertAdjacentHTML('beforeend',pageOption(j))
-        }
-        // CREATE PAGINATION BUTTONS
+        showResults(sorted);
     }
 
     changePage(requestedPage = 1, rowsSeen = 10){
