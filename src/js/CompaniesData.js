@@ -75,12 +75,12 @@ export default class CompaniesData{
     }
 
     filterResults(){
-        this.searchWords.value.toUpperCase();
+        const searchKeyword = this.searchInput.value;
         let filteredCompanies = this.wholeData.filter(company => 
             Object
             .values(company)
             .some((value) => {
-
+                return String(value).toUpperCase().includes(searchKeyword.toUpperCase());
             })
         );
         this.showResults(this.sortResults('id', 'ascending', filteredCompanies));
@@ -105,7 +105,6 @@ export default class CompaniesData{
         // find sorting button -> check if clicked button is it or different -> 
         //if same toggle between ascending and descending
         //if not the same toggle class from old and give ascending to new one
-        console.log(event.target.classList);
         if(this.sortingBtn == event.target){
             this.sortingBtn.classList.toggle('descending') ? this.sortingBtn.classList.remove('ascending') : this.sortingBtn.classList.add('ascending');
         }else{
@@ -130,13 +129,16 @@ export default class CompaniesData{
 
     drawPagination(array = this.wholeData, rowsInPage = 10){
         this.prevBtn.addEventListener('click', () => {
-            this.changePage(parseInt(this.paginationSelect.value)-1);
-            console.log(parseInt(this.paginationSelect.value));
-            this.paginationSelect.value = parseInt(this.paginationSelect.value)-1;
+            if(this.paginationSelect.value > 1){
+                this.changePage(parseInt(this.paginationSelect.value)-1);
+                this.paginationSelect.value = parseInt(this.paginationSelect.value)-1;
+            }
         });
         this.nextBtn.addEventListener('click', () => {
-            this.changePage(parseInt(this.paginationSelect.value)+1);
-            this.paginationSelect.value = parseInt(this.paginationSelect.value)+1;
+            if(this.paginationSelect.value < this.paginationSelect.length){
+                this.changePage(parseInt(this.paginationSelect.value)+1);
+                this.paginationSelect.value = parseInt(this.paginationSelect.value)+1;
+            }
         });;
         this.paginationSelect.addEventListener('change', (event) => {
             this.changePage(parseInt(event.target.value));
@@ -152,15 +154,6 @@ export default class CompaniesData{
     changePage(requestedPage = 1, rowsSeen = 10){
         let firstRowLoaded = (requestedPage - 1) * 10;
         let lastRowLoaed = firstRowLoaded + rowsSeen;
-        if(requestedPage == 1) 
-            this.prevBtn.classList.add('btnDisabled'); 
-        else 
-            this.prevBtn.classList.remove('btnDisabled');
-
-        if(requestedPage == this.paginationSelect.length) 
-            this.prevBtn.classList.add('btnDisabled'); 
-        else 
-            this.prevBtn.classList.remove('btnDisabled');
 
         Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
         .map(row => row.setAttribute('class', 'hidden-row'));

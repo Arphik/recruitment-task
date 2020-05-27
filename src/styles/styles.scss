@@ -93,6 +93,8 @@ html, body{
         margin-left: 30%;
         border: 4px solid var(--search__border--color);
         border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
         .pagination__select{
             width: 40%;
             height: 100%;
