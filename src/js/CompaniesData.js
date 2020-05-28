@@ -8,7 +8,7 @@ export default class CompaniesData{
         this.filteredData;
         this.pageNumber = 1;
         this.pageSize = 10;
-         this.jsInit();
+         this.init();
     }
 
     setWholeData(data){ this.wholeData = data; }
@@ -18,17 +18,8 @@ export default class CompaniesData{
     getFilteredData(){ return this.filteredData; }
 
 
-    jsInit(){
-        this.sortingBtn = document.querySelector('.ascending');
-        this.paginationSelect = document.querySelector('.pagination__select');
-        this.prevBtn = document.querySelector('.previous-page');
-        this.nextBtn = document.querySelector('.next-page');
-        this.searchInput = document.querySelector('.search__input');
-        this.headers = document.querySelectorAll('[data-header-id]');
-        this.searchButton = document.querySelector('.search__button');
-        this.dataRows = document.querySelector('.data-rows');
-        this.loading = document.querySelector('.loading');
-
+    init(){
+        this.fetchSelectors();
         
         this.fetchData().then((data) => {
             this.setWholeData(data);
@@ -39,6 +30,20 @@ export default class CompaniesData{
             renderPagination(this.getWholeData(), this.paginationSelect);
             this.addEventsListeners();
         });
+    }
+
+    fetchSelectors(){
+        // Search selectors
+        this.searchInput = document.querySelector('.search__input');
+        this.searchButton = document.querySelector('.search__button');
+        // Pagination selectors
+        this.paginationSelect = document.querySelector('.pagination__select');
+        this.prevBtn = document.querySelector('.previous-page');
+        this.nextBtn = document.querySelector('.next-page');
+        // Table selectors
+        this.headers = document.querySelectorAll('[data-header-id]');
+        this.dataRows = document.querySelector('.data-rows');
+        this.loading = document.querySelector('.loading');
     }
 
     addEventsListeners(){
