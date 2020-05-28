@@ -57,15 +57,16 @@ export default class CompaniesData{
         this.headers.forEach(el => el.addEventListener('click', (event) => {
             const clicked = event.target;
   
-            if  (!clicked.classList.has('active')) {
+            if  (!clicked.classList.contains('active')) {
                 document.querySelector('.active').classList.remove('active');
+                // document.querySelector('.ascending').classList.remove('ascending');
                 clicked.classList.add("active");
             }
 
             clicked.classList.toggle("ascending");
             
             const sortKey = event.target.getAttribute('data-header-id');
-            const isAscending =  clicked.classList.has("ascending");
+            const isAscending =  clicked.classList.contains("ascending");
             const sorted = this.sortResults(sortKey, isAscending, this.getFilteredData());
             const sliced = this.slicedData(sorted);
             
@@ -171,7 +172,7 @@ export default class CompaniesData{
     }
     changeButton(event){
         let clicked = event.target;
-        if(!clicked.classList.has('active')){
+        if(!clicked.classList.contains('active')){
             document.querySelector('.active').classList.remove('.active');
             clicked.classList.add('active');
         }

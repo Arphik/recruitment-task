@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500&display=swap');
 @import './variables.css';
-@import '../assets/fontawesome/css/fontawesome.min.css';
 
 
 *, :before, :after {
@@ -180,7 +179,7 @@ html, body{
     background: rgba(168, 76, 0, 0.2);
 }
 
-.ascending, .descending{
+.active{
     .fa-sort-amount-asc{
         visibility: visible;
     }
