@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import CompaniesData from './js/CompaniesData';
 import './styles/styles.scss';
 

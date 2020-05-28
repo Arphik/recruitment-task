@@ -5,11 +5,9 @@
     --search__button-glass--color: #6930c3;
     --search__radius-borders: 20px;
 
-    --content__border--color: rgb(255, 255, 255);
+    --content__border--color: #7400b8;
 
     --header__background--color: #80ffdb;
-    --cell__text--lineheight: 25px;
-    --cell__number--lineheight: 50px;
     --cell__border--color: rgba(255, 255, 255,1);
     --cell__background--1st-color: #64dfdf;
     --cell__background--2nd-color: #5e60ce;

@@ -1,4 +1,4 @@
-import {connectToOrigin} from './utils';
+import { connectToOrigin } from './utils';
 import { renderResults, renderPagination} from './htmlTemplates';
 
 export default class CompaniesData{
@@ -6,23 +6,17 @@ export default class CompaniesData{
     constructor(){
         this.wholeData = [];
         this.filteredData;
-        this.sortingBtn;
         this.pageNumber = 1;
         this.pageSize = 10;
          this.jsInit();
     }
 
-    setData(data){
-        this.wholeData = data;
-        this.filteredData = data;
-    }
+    setWholeData(data){ this.wholeData = data; }
+    getWholeData(){ return this.wholeData; }
 
-    setFilteredData(data){
-        this.wholeData = data;
-        this.filteredData = data;
-    }
+    setFilteredData(data){ this.filteredData = data; }
+    getFilteredData(){ return this.filteredData; }
 
-    fetchData(){ return this.wholeData; }
 
     jsInit(){
         this.sortingBtn = document.querySelector('.ascending');
@@ -38,49 +32,54 @@ export default class CompaniesData{
         this.addEventsListeners();
         
         this.fetchData().then((data) => {
-            this.setData(data);
+            this.setWholeData(data);
             this.setFilteredData(data);
-            console.log(this.wholeData);
             let sorted = this.sortResults('id', 'ascending', this.wholeData);
             let sliced = this.slicedData(sorted);
             renderResults(sliced, this.dataRows);
-            // renderPagination();
+            renderPagination(this.getWholeData(), this.paginationSelect);
         });
     }
 
     addEventsListeners(){
         // Search event listeners
-        // this.searchInput.addEventListener('submit', () => this.filterResults());
-        // this.headers.forEach(el => el.addEventListener('click', (event) => {
-        //     console.log(event.key);
-        //     event.preventDefault();
-        //         this.changeButton(event);
-        // }));
+        this.searchInput.addEventListener('submit', () => this.filterResults());
+        this.headers.forEach(el => el.addEventListener('click', (event) => {
+            event.preventDefault();
+        }));
         this.searchButton.addEventListener('click', () => {
             const filteredData = this.filterByKeyword(this.searchInput.value, this.wholeData);
             this.setFilteredData(filteredData);
             renderResults(this.slicedData(this.filteredData), this.dataRows);
-        });
+            renderPagination(this.filteredData, this.paginationSelect);
+        }); // Search event listeners END
         
         this.headers.forEach(el => el.addEventListener('click', (event) => {
-            this.changeButton(event);
-        })); // Search event listeners END
+            let sortKey = event.target.getAttribute('data-header-id');
+            let order = this.changeButton(event);
+            let sorted = this.sortResults(sortKey, order, this.getFilteredData());
+            let sliced = this.slicedData(sorted);
+            renderResults(sliced, this.dataRows);
+        }));
 
         // Pagination event listeners
         this.prevBtn.addEventListener('click', () => {
             if(this.paginationSelect.value > 1){
-                this.changePage(Number(this.paginationSelect.value)-1);
+                let sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value)-1)
                 this.paginationSelect.value = Number(this.paginationSelect.value)-1;
+                renderResults(sliced, this.dataRows);
             }
         });
         this.nextBtn.addEventListener('click', () => {
             if(this.paginationSelect.value < this.paginationSelect.length){
-                this.changePage(Number(this.paginationSelect.value)+1);
+                let sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value)+1)
                 this.paginationSelect.value = Number(this.paginationSelect.value)+1;
+                renderResults(sliced, this.dataRows);
             }
         });
         this.paginationSelect.addEventListener('change', (event) => {
-            this.changePage(Number(event.target.value));
+            let sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value))
+            renderResults(sliced, this.dataRows);
         });// Pagination event listeners END
     }
 
@@ -142,12 +141,7 @@ export default class CompaniesData{
         );
     }
 
-    refreshResults(){
-        this.filteredData = this.wholeData;
-        renderResults(this.sortResults('id', 'ascending', filteredCompanies), this.dataRows);
-        renderPagination(filteredCompanies, this.paginationSelect);
-    }
-
+// SORTING
     sortResults(sortKey, order, array){
         function compare(a, b) {
             let itemA = a[sortKey];
@@ -165,22 +159,24 @@ export default class CompaniesData{
     changeSortedCells(sortKey){
         document.querySelectorAll(sortKey)
     }
-
-    changeButton(event){ 
-        // find sorting button -> check if clicked button is it or different -> 
-        //if same toggle between ascending and descending
-        //if not the same toggle class from old and give ascending to new one
+    changeButton(event){
         if(this.sortingBtn == event.target){
+            // Here is situation where user clicked the same button as before, so we are checking which class it has
+            // Toggle function returns boolean value, if given class is added returns true, otherwise false.
+            //
             this.sortingBtn.classList.toggle('descending') ? this.sortingBtn.classList.remove('ascending') : this.sortingBtn.classList.add('ascending');
         }else{
-            this.sortingBtn.classList.remove('ascending');
-            this.sortingBtn.classList.remove('descending');
+            // Cause user clicked now different sorting button we look for previous one and remove its ascending/descending class
+            let prevBtn = document.querySelector('.ascending');
+            prevBtn != undefined ? prevBtn.classList.remove('ascending') : 
+                document.querySelector('.descending').classList.remove('descending');
+            // After class is removed we add ascending class to new button
+            event.target.classList.add('ascending');
             this.sortingBtn = event.target;
-            this.sortingBtn.classList.add('ascending');
         }
-        let sorted = this.sortResults(this.sortingBtn.getAttribute('data-header-id'), this.sortingBtn.classList[2])
-        renderResults(sorted, this.dataRows);
+        return event.target.classList[event.target.classList.length-1];
     }
+// SORTING END
 
     changePage(requestedPage = 1, rowsSeen = 10){
         let firstRowLoaded = (requestedPage - 1) * 10;

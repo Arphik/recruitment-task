@@ -23,9 +23,12 @@ export function renderResults(results, container){
 }
 
 export function renderPagination(array, container){
+    let x = array.length/10
+    let pagesNumber = ((x) > x.toFixed(0) ? x : x+1);
     // CREATE PAGINATION BUTTONS
     container.innerHTML = '';
-    for(let j = 0; j < (array.length/10); j++){
+    for(let j = 0; j < pagesNumber; j++){
+        console.log('creating page option', x, x.toFixed(0), pagesNumber);
         container.insertAdjacentHTML('beforeend', pageOptionTemplate(j))
     }
     // CREATE PAGINATION BUTTONS

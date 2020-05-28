@@ -1,34 +1,41 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    // path: __dirname + '/dist',
-    // filename: 'index_bundle.js'
     filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist')
+    // path: __dirname + '/dist'
   },
   module: {
     rules: [
       {
-        test: /\.s[ac]ss$/i,
-        use: [
-          // Creates `style` nodes from JS strings 
-          'style-loader',
-          // Translates CSS into CommonJS
-          'css-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
-        ],
+        test: /\.js$/,
+        use: {
+            loader: 'babel-loader',
+            options:{
+                presets: ['@babel/preset-env']
+            }
+        } 
+      },
+      {
+          test: /\.(sass|scss|css|s[ac]ss)$/i,
+          use: [
+            // Creates `style` nodes from JS strings 
+            'style-loader',
+            // Translates CSS into CommonJS
+            'css-loader',
+            // Compiles Sass to CSS
+            'sass-loader',
+          ]
       },
       {
         test: /\.html$/i,
         loader: 'html-loader',
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(png|svg|jpg|gif|eot|woff|woff2|ttf)$/,
         use: [
           'file-loader',
         ],
@@ -39,5 +46,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html'
     })
-  ]
+  ],
+  devServer:{
+      port: 9001
+  }
 };
