@@ -29,7 +29,6 @@ export default class CompaniesData{
         this.dataRows = document.querySelector('.data-rows');
         this.loading = document.querySelector('.loading');
 
-        this.addEventsListeners();
         
         this.fetchData().then((data) => {
             this.setWholeData(data);
@@ -38,6 +37,7 @@ export default class CompaniesData{
             let sliced = this.slicedData(sorted);
             renderResults(sliced, this.dataRows);
             renderPagination(this.getWholeData(), this.paginationSelect);
+            this.addEventsListeners();
         });
     }
 
@@ -157,9 +157,18 @@ export default class CompaniesData{
     }
 
     changeSortedCells(sortKey){
-        document.querySelectorAll(sortKey)
+        document.querySelectorAll(sortKey);
     }
     changeButton(event){
+        let clicked = event.target;
+        if(!clicked.classList.has('active'))
+        document.querySelector('.active').classList.remove('.active');
+        
+        clicked.classList.toggle('descending');
+
+        clicked.classList.add('.active');
+        clicked.classList.has('ascending') ? clicked.classList.add('descending') : clicked.classList.add('ascending');
+
         if(this.sortingBtn == event.target){
             // Here is situation where user clicked the same button as before, so we are checking which class it has
             // Toggle function returns boolean value, if given class is added returns true, otherwise false.
