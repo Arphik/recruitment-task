@@ -182,11 +182,12 @@ html, body{
 .active{
     .fa-sort-amount-asc{
         visibility: visible;
+        transform: scaleY(-1);
     }
 }
 .ascending{ 
     .fa-sort-amount-asc{
-        transform: scaleY(-1);
+        transform: scaleY(1);
     }
 }
 

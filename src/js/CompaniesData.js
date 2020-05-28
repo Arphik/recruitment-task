@@ -33,8 +33,8 @@ export default class CompaniesData{
         this.fetchData().then((data) => {
             this.setWholeData(data);
             this.setFilteredData(data);
-            let sorted = this.sortResults('id', true, this.wholeData);
-            let sliced = this.slicedData(sorted);
+            const sorted = this.sortResults('id', true, this.wholeData);
+            const sliced = this.slicedData(sorted);
             renderResults(sliced, this.dataRows);
             renderPagination(this.getWholeData(), this.paginationSelect);
             this.addEventsListeners();
@@ -73,20 +73,20 @@ export default class CompaniesData{
         // Pagination event listeners
         this.prevBtn.addEventListener('click', () => {
             if(this.paginationSelect.value > 1){
-                let sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value)-1)
+                const sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value)-1)
                 this.paginationSelect.value = Number(this.paginationSelect.value)-1;
                 renderResults(sliced, this.dataRows);
             }
         });
         this.nextBtn.addEventListener('click', () => {
             if(this.paginationSelect.value < this.paginationSelect.length){
-                let sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value)+1)
+                const sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value)+1)
                 this.paginationSelect.value = Number(this.paginationSelect.value)+1;
                 renderResults(sliced, this.dataRows);
             }
         });
         this.paginationSelect.addEventListener('change', (event) => {
-            let sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value))
+            const sliced = this.slicedData(this.getFilteredData(), Number(this.paginationSelect.value))
             renderResults(sliced, this.dataRows);
         });// Pagination event listeners END
     }
@@ -104,7 +104,7 @@ export default class CompaniesData{
                 )
             )
             .then((companyIncomes) => {
-                let mergedCompaniesIncomes = [];
+                const mergedCompaniesIncomes = [];
                 companies.forEach((company, index) => {
                     mergedCompaniesIncomes.push({...company, ...this.countIncomes(companyIncomes[index])});
                 });
@@ -115,7 +115,7 @@ export default class CompaniesData{
     }
 
     countIncomes(companyIncomes){
-        let sum = this.getTotalIncome(companyIncomes.incomes)
+        const sum = this.getTotalIncome(companyIncomes.incomes)
         return {
             totalIncome: sum,
             averageIncome: (sum/companyIncomes.incomes.length).toFixed(2),
@@ -132,8 +132,8 @@ export default class CompaniesData{
     }
 
     slicedData(filteredData, pageNumber = 1, pageSize = 10){
-        let firstRow = (pageNumber-1)*pageSize;
-        let lastRow = firstRow + pageSize;
+        const firstRow = (pageNumber-1)*pageSize;
+        const lastRow = firstRow + pageSize;
         return filteredData.slice(firstRow, lastRow);
     }
 
@@ -152,22 +152,22 @@ export default class CompaniesData{
 // SORTING
     sortResults(sortKey, isAscending, array){
         function compare(a, b) {
-            let itemA = a[sortKey];
-            let itemB = b[sortKey];
+            const itemA = a[sortKey];
+            const itemB = b[sortKey];
             let comparison = 0;
             comparison = itemA > itemB ? 1 : 0;
             comparison = itemA < itemB ? -1 : 1;
             isAscending ? comparison *= 1 : comparison *= -1;
             return comparison;
         }
-        let sorted = array.sort(compare);
+        const sorted = array.sort(compare);
         return sorted;
     }
 // SORTING END
 
     changePage(requestedPage = 1, rowsSeen = 10){
-        let firstRowLoaded = (requestedPage - 1) * 10;
-        let lastRowLoaed = firstRowLoaded + rowsSeen;
+        const firstRowLoaded = (requestedPage - 1) * 10;
+        const lastRowLoaed = firstRowLoaded + rowsSeen;
 
         Array.prototype.slice.call(document.querySelectorAll('.showed-row')) // Hiding all rows
         .map(row => row.setAttribute('class', 'hidden-row'));
