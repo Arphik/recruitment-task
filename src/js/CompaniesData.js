@@ -33,7 +33,7 @@ export default class CompaniesData{
         this.fetchData().then((data) => {
             this.setWholeData(data);
             this.setFilteredData(data);
-            let sorted = this.sortResults('id', 'ascending', this.wholeData);
+            let sorted = this.sortResults('id', true, this.wholeData);
             let sliced = this.slicedData(sorted);
             renderResults(sliced, this.dataRows);
             renderPagination(this.getWholeData(), this.paginationSelect);
@@ -43,10 +43,8 @@ export default class CompaniesData{
 
     addEventsListeners(){
         // Search event listeners
-        this.searchInput.addEventListener('submit', () => this.filterResults());
-        this.headers.forEach(el => el.addEventListener('click', (event) => {
-            event.preventDefault();
-        }));
+        this.searchInput.addEventListener('submit', (event) => {
+        });
         this.searchButton.addEventListener('click', () => {
             const filteredData = this.filterByKeyword(this.searchInput.value, this.wholeData);
             this.setFilteredData(filteredData);
@@ -56,16 +54,15 @@ export default class CompaniesData{
         
         this.headers.forEach(el => el.addEventListener('click', (event) => {
             const clicked = event.target;
-  
+            if(clicked.hasAttribute('data-header-id') === false){ return; }
             if  (!clicked.classList.contains('active')) {
                 document.querySelector('.active').classList.remove('active');
-                // document.querySelector('.ascending').classList.remove('ascending');
                 clicked.classList.add("active");
             }
 
             clicked.classList.toggle("ascending");
             
-            const sortKey = event.target.getAttribute('data-header-id');
+            const sortKey = clicked.getAttribute('data-header-id');
             const isAscending =  clicked.classList.contains("ascending");
             const sorted = this.sortResults(sortKey, isAscending, this.getFilteredData());
             const sliced = this.slicedData(sorted);
@@ -165,39 +162,6 @@ export default class CompaniesData{
         }
         let sorted = array.sort(compare);
         return sorted;
-    }
-
-    changeSortedCells(sortKey){
-        document.querySelectorAll(sortKey);
-    }
-    changeButton(event){
-        let clicked = event.target;
-        if(!clicked.classList.contains('active')){
-            document.querySelector('.active').classList.remove('.active');
-            clicked.classList.add('active');
-        }
-        
-        return { sortOrder: clicked.classList.toggle('descending')}; 
-
-
-
-
-    
-        if(this.sortingBtn == event.target){
-            // Here is situation where user clicked the same button as before, so we are checking which class it has
-            // Toggle function returns boolean value, if given class is added returns true, otherwise false.
-            //
-            this.sortingBtn.classList.toggle('descending') ? this.sortingBtn.classList.remove('ascending') : this.sortingBtn.classList.add('ascending');
-        }else{
-            // Cause user clicked now different sorting button we look for previous one and remove its ascending/descending class
-            let prevBtn = document.querySelector('.ascending');
-            prevBtn != undefined ? prevBtn.classList.remove('ascending') : 
-                document.querySelector('.descending').classList.remove('descending');
-            // After class is removed we add ascending class to new button
-            event.target.classList.add('ascending');
-            this.sortingBtn = event.target;
-        }
-        return event.target.classList[event.target.classList.length-1];
     }
 // SORTING END
 

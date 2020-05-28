@@ -184,14 +184,10 @@ html, body{
         visibility: visible;
     }
 }
-.descending{ 
+.ascending{ 
     .fa-sort-amount-asc{
         transform: scaleY(-1);
     }
-}
-
-.ascending {
-
 }
 
 .hidden{
