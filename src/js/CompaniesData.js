@@ -55,10 +55,20 @@ export default class CompaniesData{
         }); // Search event listeners END
         
         this.headers.forEach(el => el.addEventListener('click', (event) => {
-            let sortKey = event.target.getAttribute('data-header-id');
-            let order = this.changeButton(event);
-            let sorted = this.sortResults(sortKey, order, this.getFilteredData());
-            let sliced = this.slicedData(sorted);
+            const clicked = event.target;
+  
+            if  (!clicked.classList.has('active')) {
+                document.querySelector('.active').classList.remove('active');
+                clicked.classList.add("active");
+            }
+
+            clicked.classList.toggle("ascending");
+            
+            const sortKey = event.target.getAttribute('data-header-id');
+            const isAscending =  clicked.classList.has("ascending");
+            const sorted = this.sortResults(sortKey, isAscending, this.getFilteredData());
+            const sliced = this.slicedData(sorted);
+            
             renderResults(sliced, this.dataRows);
         }));
 
@@ -142,14 +152,14 @@ export default class CompaniesData{
     }
 
 // SORTING
-    sortResults(sortKey, order, array){
+    sortResults(sortKey, isAscending, array){
         function compare(a, b) {
             let itemA = a[sortKey];
             let itemB = b[sortKey];
             let comparison = 0;
             comparison = itemA > itemB ? 1 : 0;
             comparison = itemA < itemB ? -1 : 1;
-            order === 'ascending' ? comparison *= 1 : comparison *= -1;
+            isAscending ? comparison *= 1 : comparison *= -1;
             return comparison;
         }
         let sorted = array.sort(compare);
@@ -161,14 +171,17 @@ export default class CompaniesData{
     }
     changeButton(event){
         let clicked = event.target;
-        if(!clicked.classList.has('active'))
-        document.querySelector('.active').classList.remove('.active');
+        if(!clicked.classList.has('active')){
+            document.querySelector('.active').classList.remove('.active');
+            clicked.classList.add('active');
+        }
         
-        clicked.classList.toggle('descending');
+        return { sortOrder: clicked.classList.toggle('descending')}; 
 
-        clicked.classList.add('.active');
-        clicked.classList.has('ascending') ? clicked.classList.add('descending') : clicked.classList.add('ascending');
 
+
+
+    
         if(this.sortingBtn == event.target){
             // Here is situation where user clicked the same button as before, so we are checking which class it has
             // Toggle function returns boolean value, if given class is added returns true, otherwise false.
