@@ -1,12 +1,13 @@
 
 function dataRowTemplate(result){
+    console.log(result);
     return `<div data-row class="row">
                 <div class="id cell"><span>${result.id}</span></div>
                 <div class="name cell"><span>${result.name}</span></div>
                 <div class="city cell"><span>${result.city}</span></div>
                 <div class="total-income cell"><span>${result.totalIncome}</span></div>
                 <div class="average-income cell"><span>${result.averageIncome}</span></div>
-                <div class="last-income cell"><span>${result.lastIncome}</span></div>
+                <div class="last-income cell"><span>${result.lastMonthIncomes}</span></div>
             </div>`;
 }
 function pageOptionTemplate(j){

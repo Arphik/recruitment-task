@@ -49,6 +49,7 @@ export default class CompaniesData{
     addEventsListeners(){
         // Search event listeners
         this.searchInput.addEventListener('submit', (event) => {
+            event.preventDefault();
         });
         this.searchButton.addEventListener('click', () => {
             const filteredData = this.filterByKeyword(this.searchInput.value, this.wholeData);
@@ -120,20 +121,25 @@ export default class CompaniesData{
     }
 
     countIncomes(companyIncomes){
-        const sum = this.getTotalIncome(companyIncomes.incomes)
+        const sum = this.getTotalIncome(companyIncomes.incomes);
+        const sortedIncomes = this.sortResults('date', false, companyIncomes.incomes);
+        const lastDate = new Date(sortedIncomes[0].date);
+        const lastMonthDate = new Date(lastDate.getFullYear(), lastDate.getMonth());
         return {
             totalIncome: sum,
             averageIncome: (sum/companyIncomes.incomes.length).toFixed(2),
-            lastIncome: this.sortResults('date', 'descending', companyIncomes.incomes)[0].value
+            lastMonthIncomes: 
+            this.getTotalIncome(sortedIncomes.filter(income => new Date(income.date) >= lastMonthDate))
         }
     }
 
-    getTotalIncome(incomesObjects){  
-        return incomesObjects
+    getTotalIncome(incomesObjects){ 
+        const calc = incomesObjects
                 .reduce((prev, curr) => {
                     return prev + Number(curr.value);
                 }, 0)
                 .toFixed(2);
+        return calc;
     }
 
     slicedData(filteredData, pageNumber = 1, pageSize = 10){

@@ -22,7 +22,7 @@ html, body{
     font-family: 'Roboto', sans-serif;
 }
 
-.search-form{
+.search-form{// search form
     height: 5vh;
     display: flex;
     justify-content: space-between;
@@ -99,16 +99,16 @@ html, body{
         span{
             width: 30%;
             height: 100%;
-            align-self: center;
             cursor: pointer;
             text-align: center;
+            line-height: 43px;
             &:hover{
                 color: white;
                 background:  var(--search__border--color);
             }
         }
     }
-}
+}// search form END
 
 .content{
     border: 6px solid var(--content__border--color);
@@ -135,6 +135,7 @@ html, body{
     display: grid;
     grid-template-columns: 6% 23% 23% 17% 15% 16%;
     .cell{
+        line-height: 16px;
         align-self: center;
     }
 }
@@ -146,6 +147,9 @@ html, body{
         height: 6vh;
         border-bottom: 3px solid var(--content__border--color);
         cursor: pointer;
+    }
+    i{
+        pointer-events: none;
     }
 }
 
@@ -168,7 +172,7 @@ html, body{
 .cell {
     height: 100%;
     padding: 8px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     border-right: 1px solid var(--search__border--color);
 }
 
@@ -195,6 +199,8 @@ html, body{
     visibility: hidden;
 }
 
+
+
 @media(max-width: 675px) {
 
     html, body{
@@ -210,6 +216,12 @@ html, body{
     }
     .header, .row {
         grid-template-columns: 7% 23% 23% 17% 15% 16%;
+    }
+    
+    .header{
+        .cell{
+            height: 9vh;
+        }
     }
 
     .ascending, .descending{
@@ -231,6 +243,13 @@ html, body{
 
     .header, .row{
         grid-template-columns: 7% 23% 23% 17% 15% 16%;
+    }
+    
+    .header{
+        .cell{
+            height: 5vh;
+            // line-height: 26px;
+        }
     }
 
     .pagination{
@@ -258,12 +277,6 @@ html, body{
         
         margin-bottom: 0;
     }
-    
-.header{
-    .cell{
-        height: 9vh;
-    }
-}
     .loading{
         width: 70%;
         .loading__image{
