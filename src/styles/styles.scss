@@ -10,7 +10,6 @@
   font-size: 100%;
   font: inherit;
   color: inherit;
-  vertical-align: baseline;
   box-sizing: border-box;
 }
 html,
@@ -103,16 +102,19 @@ body {
       width: 40%;
       height: 100%;
     }
-    span {
-      width: 30%;
-      height: 100%;
-      cursor: pointer;
-      text-align: center;
-      line-height: 36px;
-      &:hover {
-        color: white;
-        background: var(--search__border--color);
-      }
+    .change-page{
+        width: 30%;
+        height: 100%;
+        text-align: center;
+        cursor: pointer;
+        span {
+            vertical-align: middle;
+            align-self: center;
+        }
+        &:hover {
+          color: white;
+          background: var(--search__border--color);
+        }
     }
   }
 } // search form END
@@ -227,14 +229,11 @@ body {
       font-size: 1rem;
     }
     .search__button {
-      flex: 3;
+      flex: 2;
     }
     .pagination {
       flex: 3;
-      margin-left: 10%;
-      span {
-        line-height: 24px;
-      }
+      margin-left: 0;
     }
   }
 
@@ -263,7 +262,32 @@ body {
   }
 }
 
+@media (max-height: 360px) {
+  .search-form {
+    height: 11vh;
+  }
+
+  .header {
+    .cell {
+      height: 17vh;
+    }
+  }
+}
+
 @media (min-width: 676px) and (max-width: 1025px) {
+    .search-form {
+      .search__input {
+        flex: 5;
+        font-size: 1rem;
+      }
+      .search__button {
+        flex: 1;
+      }
+      .pagination {
+        flex: 2;
+        margin-left: 20%;
+      }
+    }
   .cell {
     font-size: 1.2rem;
   }
@@ -275,16 +299,17 @@ body {
 
   .header {
     .cell {
-      height: 5vh;
-      // line-height: 26px;
+      height: 6vh;
+    }
+  }
+  .row {
+    .cell {
+      padding: 10px 0;
     }
   }
 
   .pagination {
-    width: 100%;
-    .page {
-      padding: 2%;
-    }
+    margin-left: 0;
   }
   .ascending,
   .descending {
