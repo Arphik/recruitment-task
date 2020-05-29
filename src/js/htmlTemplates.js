@@ -1,6 +1,5 @@
 
 function dataRowTemplate(result){
-    console.log(result);
     return `<div data-row class="row">
                 <div class="id cell"><span>${result.id}</span></div>
                 <div class="name cell"><span>${result.name}</span></div>
@@ -25,11 +24,10 @@ export function renderResults(results, container){
 
 export function renderPagination(array, container){
     let x = array.length/10
-    let pagesNumber = ((x) > x.toFixed(0) ? x : x+1);
+    let pagesNumber = ((x) > x.toFixed(0) ? Number(x.toFixed(0))+1 : x);
     // CREATE PAGINATION BUTTONS
     container.innerHTML = '';
     for(let j = 0; j < pagesNumber; j++){
-        console.log('creating page option', x, x.toFixed(0), pagesNumber);
         container.insertAdjacentHTML('beforeend', pageOptionTemplate(j))
     }
     // CREATE PAGINATION BUTTONS

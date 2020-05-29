@@ -44,6 +44,9 @@ html, body{
         ::placeholder{
             color: black;
         }
+        &:focus{
+            outline: none;
+        }
     }
     .search__button{
         flex: 1;
@@ -101,7 +104,7 @@ html, body{
             height: 100%;
             cursor: pointer;
             text-align: center;
-            line-height: 43px;
+            line-height: 36px;
             &:hover{
                 color: white;
                 background:  var(--search__border--color);
@@ -111,7 +114,7 @@ html, body{
 }// search form END
 
 .content{
-    border: 6px solid var(--content__border--color);
+    border: 3px solid var(--content__border--color);
 }
 
 .loading{
@@ -147,8 +150,13 @@ html, body{
         height: 6vh;
         border-bottom: 3px solid var(--content__border--color);
         cursor: pointer;
+        &:hover{
+            color: var(--header__background--color);
+            background: var(--header__font--color);
+        }
     }
     i{
+        padding: 3px;
         pointer-events: none;
     }
 }
@@ -206,16 +214,28 @@ html, body{
     html, body{
         font-size: 4vw;
     }
-
-    .search__input{
-        flex: 2;
+    .search-form{
+        .search__input{
+            flex: 4;
+            font-size: 1rem;
+        }
+        .search__button{
+            flex: 3;
+        }
+        .pagination{
+            flex: 3;
+            margin-left: 10%;
+            span{
+                line-height: 24px;
+            }
+        }
     }
 
     .content{
         width: 100vw;
     }
     .header, .row {
-        grid-template-columns: 7% 23% 23% 17% 15% 16%;
+        grid-template-columns: 7% 22% 22% 17% 15% 17%;
     }
     
     .header{
