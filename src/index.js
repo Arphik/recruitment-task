@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import CompaniesData from './js/CompaniesData';
-import './styles/styles.scss';
+import _ from "lodash";
+import CompaniesData from "./js/CompaniesData";
+import "./styles/styles.scss";
 
-window.addEventListener('DOMContentLoaded', () => new CompaniesData());
+window.addEventListener("DOMContentLoaded", () => new CompaniesData());

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Utils.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,42 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Utils.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>export default class Utils {
+  constructor() {}
 
+  connectToOrigin(url) {
+    try {
+      return fetch(url);
+    } catch (error) {
+      console.log("There was a connection error: ", error);
+    }
+  }
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+  /**
+   *
+   * @param {array} incomesObjects Array of objects each one contains income and date
+   */
+  getTotalIncome(incomesObjects) {
+    const calc = incomesObjects
+      .reduce((prev, curr) => {
+        return prev + Number(curr.value);
+      }, 0)
+      .toFixed(2);
+    return calc;
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

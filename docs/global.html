@@ -156,7 +156,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line68">line 68</a>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -199,6 +199,11 @@
 
 
 
+<div class="description">
+    <p>Return object with calculated: sum of all company incomes, average income from sum,
+and sum of incomes from last month</p>
+</div>
+
 
 
 
@@ -238,7 +243,7 @@
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">array</span>
 
 
             
@@ -248,7 +253,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Array of objects with income and date</p></td>
         </tr>
 
     
@@ -289,7 +294,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line152">line 152</a>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -335,9 +340,9 @@
 <div class="description">
     <p>Using fetch(url) and get companies data, then convert response to json.
 Next, Promise.all make sure that another data table is loaded and converted to json before next step which is modifying companies array.
-Now the algorithm for every company array row add some extra properties to object, which are calculated by functions declarated before Promise.all,
-getTotalIncome() and getLastIncome(). Function getData is used on line 20 with then(),
-where global variable is filled with complete data about companies and their incomes.</p>
+Now the algorithm for every company object add some extra properties, which are calculated by function countIncomes.
+Function fetchData is used in init() with then(), where class variable wholeData and filteredData is
+filled with complete data about companies and their incomes.</p>
 </div>
 
 
@@ -381,95 +386,7 @@ where global variable is filled with complete data about companies and their inc
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line126">line 126</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="fetchSelectors"><span class="type-signature"></span>fetchSelectors<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Assigning to variable static elements of the HTML</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line51">line 51</a>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line155">line 155</a>
     </li></ul></dd>
     
 
@@ -557,7 +474,7 @@ object from array is returning by filter to newArray. After complete filtering r
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">string</span>
 
 
             
@@ -567,7 +484,7 @@ object from array is returning by filter to newArray. After complete filtering r
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>String from search input</p></td>
         </tr>
 
     
@@ -580,7 +497,7 @@ object from array is returning by filter to newArray. After complete filtering r
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">array</span>
 
 
             
@@ -590,7 +507,7 @@ object from array is returning by filter to newArray. After complete filtering r
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>All data from API</p></td>
         </tr>
 
     
@@ -631,7 +548,140 @@ object from array is returning by filter to newArray. After complete filtering r
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line183">line 183</a>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line224">line 224</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getTotalIncome"><span class="type-signature"></span>getTotalIncome<span class="signature">(incomesObjects)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>incomesObjects</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of objects each one contains income and date</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Utils.js.html">Utils.js</a>, <a href="Utils.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -715,7 +765,411 @@ object from array is returning by filter to newArray. After complete filtering r
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line35">line 35</a>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="renderPagination"><span class="type-signature"></span>renderPagination<span class="signature">(array, container)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>array</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Filtered data which length is used to calculate number of pages</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Place for rendering pagination</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="htmlTemplates.js.html">htmlTemplates.js</a>, <a href="htmlTemplates.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="renderResults"><span class="type-signature"></span>renderResults<span class="signature">(results, container)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Render given data as rows in container</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>results</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Part of data to render, default: 10 items</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Place for rendering one</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="htmlTemplates.js.html">htmlTemplates.js</a>, <a href="htmlTemplates.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setupSelectors"><span class="type-signature"></span>setupSelectors<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Assigning to variable static elements of the HTML</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -803,7 +1257,7 @@ object from array is returning by filter to newArray. After complete filtering r
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">array</span>
 
 
             
@@ -830,7 +1284,7 @@ object from array is returning by filter to newArray. After complete filtering r
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">number</span>
 
 
             
@@ -846,7 +1300,7 @@ object from array is returning by filter to newArray. After complete filtering r
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Requested page by user</p></td>
         </tr>
 
     
@@ -859,7 +1313,7 @@ object from array is returning by filter to newArray. After complete filtering r
             <td class="type">
             
                 
-<span class="param-type">*</span>
+<span class="param-type">number</span>
 
 
             
@@ -875,7 +1329,7 @@ object from array is returning by filter to newArray. After complete filtering r
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Default 10 rows on page</p></td>
         </tr>
 
     
@@ -916,7 +1370,186 @@ object from array is returning by filter to newArray. After complete filtering r
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line170">line 170</a>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line211">line 211</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="sortResults"><span class="type-signature"></span>sortResults<span class="signature">(sortKey, isAscending, array)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sortKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Column symbol by which sorting is made</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isAscending</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>If true sorting ascending, else descending</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>array</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Filtered or not data from API</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CompaniesData.js.html">CompaniesData.js</a>, <a href="CompaniesData.js.html#line243">line 243</a>
     </li></ul></dd>
     
 
@@ -962,13 +1595,13 @@ object from array is returning by filter to newArray. After complete filtering r
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports_module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addEventsListeners">addEventsListeners</a></li><li><a href="global.html#countIncomes">countIncomes</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#fetchSelectors">fetchSelectors</a></li><li><a href="global.html#filterByKeyword">filterByKeyword</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#slicedData">slicedData</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports_module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addEventsListeners">addEventsListeners</a></li><li><a href="global.html#countIncomes">countIncomes</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#filterByKeyword">filterByKeyword</a></li><li><a href="global.html#getTotalIncome">getTotalIncome</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#renderPagination">renderPagination</a></li><li><a href="global.html#renderResults">renderResults</a></li><li><a href="global.html#setupSelectors">setupSelectors</a></li><li><a href="global.html#slicedData">slicedData</a></li><li><a href="global.html#sortResults">sortResults</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri May 29 2020 20:39:09 GMT+0200 (GMT+02:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Fri May 29 2020 22:22:31 GMT+0200 (GMT+02:00)
 </footer>
 
 <script> prettyPrint(); </script>
