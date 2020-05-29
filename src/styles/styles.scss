@@ -123,7 +123,7 @@ body {
 
 .loading {
   width: 73vh;
-  height: 65vh;
+  height: 35vh;
   padding: 10px;
   margin: 0 auto;
   text-align: center;
@@ -132,6 +132,10 @@ body {
     height: 55%;
     display: inline-block;
     background: url("../assets/images/catching-data.png") no-repeat center/cover;
+  }
+  i {
+    font-size: 6rem;
+    padding: 30px 0;
   }
   p {
     margin: 4px;

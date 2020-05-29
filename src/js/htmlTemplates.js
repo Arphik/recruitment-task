@@ -1,3 +1,8 @@
+/**
+ * Template of row in table
+ * @param {array} result
+ * @returns {}
+ */
 function dataRowTemplate(result) {
   return `<div data-row class="row">
                 <div class="id cell"><span>${result.id}</span></div>
@@ -8,6 +13,11 @@ function dataRowTemplate(result) {
                 <div class="last-income cell"><span>${result.lastMonthIncomes}</span></div>
             </div>`;
 }
+
+/**
+ * Template of option in pagination
+ * @param {number} j Page number
+ */
 function pageOptionTemplate(j) {
   return `<option class="page">
                 ${j + 1}
@@ -16,8 +26,8 @@ function pageOptionTemplate(j) {
 
 /**
  * Render given data as rows in container
- * @param {*} results Part of data to render, default: 10 items
- * @param {*} container Place for rendering one
+ * @param {array} results Part of data to render, default: 10 items
+ * @param {HTMLElement} container Place for rendering one
  */
 export function renderResults(results, container) {
   container.innerHTML = "";
@@ -28,8 +38,9 @@ export function renderResults(results, container) {
 }
 
 /**
- * @param {*} array Filtered data which length is used to calculate number of pages
- * @param {*} container Place for rendering pagination
+ * Render option elements in select markup.
+ * @param {array} array Filtered data which length is used to calculate number of pages
+ * @param {HTMLElement} container Place for rendering pagination
  */
 export function renderPagination(array, container) {
   let x = array.length / 10;

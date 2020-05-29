@@ -1,6 +1,11 @@
 export default class Utils {
   constructor() {}
 
+  /**
+   * Returns data from API as JSON
+   * @param {string} url
+   * @returns {Promise}
+   */
   connectToOrigin(url) {
     try {
       return fetch(url);
@@ -10,14 +15,13 @@ export default class Utils {
   }
 
   /**
-   *
+   * Calculate sum of properties of array
    * @param {array} incomesObjects Array of objects each one contains income and date
+   * @returns {string} Sum
    */
   getTotalIncome(incomesObjects) {
     const calc = incomesObjects
-      .reduce((prev, curr) => {
-        return prev + Number(curr.value);
-      }, 0)
+      .reduce((prev, curr) => prev + Number(curr.value), 0)
       .toFixed(2);
     return calc;
   }

@@ -6,17 +6,9 @@ export default class CompaniesData {
    * @constructor
    */
   constructor() {
-    /** *
-        * Data of companies gathered from two tables after summarize and calculate incomes for each one
-        * @type {array}
-        * @type {array} filteredData After application initialization contains full unfiltered data.
-        * @type {number} pageNumber 
-        this.wholeData;
-        this.filteredData;
-        this.pageNumber = 1;
-        /**
-        * @type {number} pageSize 
-        */
+    this.wholeData;
+    this.filteredData;
+    this.pageNumber = 1;
     this.pageSize = 10;
     this.utils = new Utils();
     this.init();
@@ -37,7 +29,9 @@ export default class CompaniesData {
   }
 
   /**
-   *
+   * When application is loaded, it assigning static elements to variables
+   * fetch and then sort data ascending, slice from it 10 first items and render them.
+   * It also render pagination and add event listeners to static elements
    */
   init() {
     this.setupSelectors();
@@ -74,10 +68,9 @@ export default class CompaniesData {
    * Assigning event listeners to static elements of the HTML
    */
   addEventsListeners() {
-    // Search event listeners
-    this.searchInput.addEventListener("submit", (event) => {
-      event.preventDefault();
-    });
+    /**
+     * Search event listener
+     */
     this.searchButton.addEventListener("click", () => {
       const filteredData = this.filterByKeyword(
         this.searchInput.value,
@@ -88,22 +81,16 @@ export default class CompaniesData {
       renderPagination(this.filteredData, this.paginationSelect);
     }); // Search event listeners END
 
+    /**
+     * Check what header button user clicked, get boolean from function
+     * changeSortBtn and pass them to sorting method with filtered data
+     * After that get array from slicedData method and pass it 
+     * to renderResults function
+     */
     this.headers.forEach((el) =>
       el.addEventListener("click", (event) => {
-        const clicked = event.target;
-        if (clicked.hasAttribute("data-header-id") === false) {
-          return;
-        }
-
-        if (!clicked.classList.contains("active")) {
-          document.querySelector(".active").classList.remove("active");
-          clicked.classList.add("active");
-        }
-
-        clicked.classList.toggle("ascending");
-
-        const sortKey = clicked.getAttribute("data-header-id");
-        const isAscending = clicked.classList.contains("ascending");
+        const sortKey = event.target.getAttribute("data-header-id");
+        const isAscending = this.changeSortBtn(event.target);
         const sorted = this.sortResults(
           sortKey,
           isAscending,
@@ -151,6 +138,7 @@ export default class CompaniesData {
    * Now the algorithm for every company object add some extra properties, which are calculated by function countIncomes.
    * Function fetchData is used in init() with then(), where class variable wholeData and filteredData is
    * filled with complete data about companies and their incomes.
+   * @returns {object}
    */
   fetchData() {
     return this.utils
@@ -180,9 +168,10 @@ export default class CompaniesData {
   }
 
   /**
-   * Return object with calculated: sum of all company incomes, average income from sum, 
+   * Return object with calculated: sum of all company incomes, average income from sum,
    * and sum of incomes from last month
    * @param {array} companyIncomes Array of objects with income and date
+   * @returns {{totalIncome: string, averageIncome: string, lastMonthIncomes: string}}
    */
   countIncomes(companyIncomes) {
     const sum = this.utils.getTotalIncome(companyIncomes.incomes);
@@ -207,6 +196,7 @@ export default class CompaniesData {
    * @param {array} filteredData
    * @param {number} pageNumber Requested page by user
    * @param {number} pageSize Default 10 rows on page
+   * @returns {array} Part of data array which will fit in one page by, default 10 items
    */
   slicedData(filteredData, pageNumber = 1, pageSize = 10) {
     const firstRow = (pageNumber - 1) * pageSize;
@@ -215,11 +205,12 @@ export default class CompaniesData {
   }
 
   /**
-   * Filtering start when input text have some content and Search button is clicked, if text is empty table will be filled with defaults start rows.
+   * Filtering start when input text have some content and Search button is clickedSortBtn, if text is empty table will be filled with defaults start rows.
    * Function is using filter with callback on global variable companiesData. If one of the properties is similar to keyWords,
    * object from array is returning by filter to newArray. After complete filtering results are sorted by id, in ascending order.
    * @param {string} searchKeyword String from search input
    * @param {array} data All data from API
+   * @returns {array}
    */
   filterByKeyword(searchKeyword, data) {
     searchKeyword = this.searchInput.value;
@@ -235,10 +226,13 @@ export default class CompaniesData {
 
   // SORTING
   /**
-   * 
+   * Function is using custom method to compare two items
+   * Parameter from isAscending come from changeSortBtn
+   * If true sorting ascending else descending
    * @param {string} sortKey Column symbol by which sorting is made
    * @param {boolean} isAscending If true sorting ascending, else descending
    * @param {array} array Filtered or not data from API
+   * @returns {array}
    */
   sortResults(sortKey, isAscending, array) {
     function compare(a, b) {
@@ -255,19 +249,23 @@ export default class CompaniesData {
   }
   // SORTING END
 
-  changeSortBtn() {}
+  /**
+   * Gives button from header class "active" and remove from previous clicked button
+   * Also it toggle class "ascending", if add this class return true, else false
+   * Returned value is used as parameter in sortResults
+   * @param {object} clickedSortBtn
+   * @returns {boolean} isAscending
+   */
+  changeSortBtn(clickedSortBtn) {
+    if (clickedSortBtn.hasAttribute("data-header-id") === false) {
+      return;
+    }
 
-  changePage(requestedPage = 1, rowsSeen = 10) {
-    const firstRowLoaded = (requestedPage - 1) * 10;
-    const lastRowLoaed = firstRowLoaded + rowsSeen;
+    if (!clickedSortBtn.classList.contains("active")) {
+      document.querySelector(".active").classList.remove("active");
+      clickedSortBtn.classList.add("active");
+    }
 
-    Array.prototype.slice
-      .call(document.querySelectorAll(".showed-row")) // Hiding all rows
-      .map((row) => row.setAttribute("class", "hidden-row"));
-
-    Array.prototype.slice
-      .call(document.querySelectorAll(".hidden-row")) // Showing rows depending on start and how many
-      .slice(firstRowLoaded, lastRowLoaed)
-      .map((row) => row.setAttribute("class", "showed-row row"));
+    return clickedSortBtn.classList.toggle("ascending");
   }
 }
