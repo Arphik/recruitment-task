@@ -1,7 +1,7 @@
 Companies API
 
 
-Application show companies data from API (id, name, city, total incomes, average income, incomes from last month) in table. 
+    Application show companies data from API (id, name, city, total incomes, average income, incomes from last month) in table. 
 Additional it can sort content by each column at a time by clicking corresponding button in table header(second click by ascending), search through every field. 
     Application works also on mobile devices.
 
