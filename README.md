@@ -6,8 +6,11 @@ Additional it can sort content by each column at a time by clicking correspondin
     Application works also on mobile devices.
 
 Folder structure:
-Repo has three main folders, in src there is a code in development, dosc contains documentation in jsdoc format, 
-and dist already built and updated application ready to use.
+Repo has three main folders ,
+    in src there is a code in development, 
+    dosc contains documentation in jsdoc format, 
+    dist already built and updated application ready to use
+    (https://arphik.github.io/recruitment-task/dist/)
 
 
 
