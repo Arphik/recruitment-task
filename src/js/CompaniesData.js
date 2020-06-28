@@ -35,7 +35,6 @@ export default class CompaniesData {
    */
   init() {
     this.setupSelectors();
-
     this.fetchData().then((data) => {
       this.setWholeData(data);
       this.setFilteredData(data);
@@ -72,19 +71,12 @@ export default class CompaniesData {
      * Search event listener
      */
     this.searchButton.addEventListener("click", () => {
-      const filteredData = this.filterByKeyword(
-        this.searchInput.value,
-        this.wholeData
-      );
-      this.setFilteredData(filteredData);
-      renderResults(this.slicedData(this.filteredData), this.dataRows);
-      renderPagination(this.filteredData, this.paginationSelect);
     }); // Search event listeners END
 
     /**
      * Check what header button user clicked, get boolean from function
      * changeSortBtn and pass them to sorting method with filtered data
-     * After that get array from slicedData method and pass it 
+     * After that get array from slicedData method and pass it
      * to renderResults function
      */
     this.headers.forEach((el) =>
@@ -96,6 +88,7 @@ export default class CompaniesData {
           isAscending,
           this.getFilteredData()
         );
+        this.setFilteredData(sorted);
         const sliced = this.slicedData(sorted);
 
         renderResults(sliced, this.dataRows);
@@ -103,7 +96,7 @@ export default class CompaniesData {
     );
 
     // Pagination event listeners
-    this.prevBtn.addEventListener("click", () => {
+    this.prevBtn.addEventListener("click", () => { // Previous page button
       if (this.paginationSelect.value > 1) {
         const sliced = this.slicedData(
           this.getFilteredData(),
@@ -113,7 +106,7 @@ export default class CompaniesData {
         renderResults(sliced, this.dataRows);
       }
     });
-    this.nextBtn.addEventListener("click", () => {
+    this.nextBtn.addEventListener("click", () => { // Next page button
       if (this.paginationSelect.value < this.paginationSelect.length) {
         const sliced = this.slicedData(
           this.getFilteredData(),
@@ -123,7 +116,7 @@ export default class CompaniesData {
         renderResults(sliced, this.dataRows);
       }
     });
-    this.paginationSelect.addEventListener("change", (event) => {
+    this.paginationSelect.addEventListener("change", (event) => { // SELECT button
       const sliced = this.slicedData(
         this.getFilteredData(),
         Number(event.target.value)
@@ -156,7 +149,7 @@ export default class CompaniesData {
           )
         ).then((companyIncomes) => {
           const mergedCompaniesIncomes = [];
-          companies.forEach((company, index) => {
+          companies.map((company, index) => {
             mergedCompaniesIncomes.push({
               ...company,
               ...this.countIncomes(companyIncomes[index]),
@@ -175,20 +168,17 @@ export default class CompaniesData {
    */
   countIncomes(companyIncomes) {
     const sum = this.utils.getTotalIncome(companyIncomes.incomes);
-    const sortedIncomes = this.sortResults(
-      "date",
-      false,
-      companyIncomes.incomes
-    );
+    const sortedIncomes = this.sortResults("date", false, companyIncomes.incomes);
     const lastDate = new Date(sortedIncomes[0].date);
     const lastMonthDate = new Date(lastDate.getFullYear(), lastDate.getMonth());
-    return {
+    const obj = {
       totalIncome: sum,
-      averageIncome: (sum / companyIncomes.incomes.length).toFixed(2),
+      averageIncome: Number((sum / companyIncomes.incomes.length).toFixed(2)),
       lastMonthIncomes: this.utils.getTotalIncome(
         sortedIncomes.filter((income) => new Date(income.date) >= lastMonthDate)
       ),
     };
+    return obj;
   }
 
   /**
@@ -202,6 +192,16 @@ export default class CompaniesData {
     const firstRow = (pageNumber - 1) * pageSize;
     const lastRow = firstRow + pageSize;
     return filteredData.slice(firstRow, lastRow);
+  }
+
+  searchData(){
+    const filteredData = this.filterByKeyword(
+      this.searchInput.value,
+      this.wholeData
+    );
+    this.setFilteredData(filteredData);
+    renderResults(this.slicedData(this.filteredData), this.dataRows);
+    renderPagination(this.filteredData, this.paginationSelect);
   }
 
   /**
@@ -234,18 +234,13 @@ export default class CompaniesData {
    * @param {array} array Filtered or not data from API
    * @returns {array}
    */
-  sortResults(sortKey, isAscending, array) {
-    function compare(a, b) {
-      const itemA = a[sortKey];
-      const itemB = b[sortKey];
-      let comparison = 0;
-      comparison = itemA > itemB ? 1 : 0;
-      comparison = itemA < itemB ? -1 : 1;
-      isAscending ? (comparison *= 1) : (comparison *= -1);
-      return comparison;
-    }
-    const sorted = array.sort(compare);
-    return sorted;
+  sortResults(sortKey, isAscending, array){
+    return [...array].sort((a, b) =>
+      a[sortKey] === b[sortKey] ? 0 : 
+      a[sortKey] > b[sortKey] ? 
+        isAscending ? 1 : -1 : 
+        isAscending ? -1 : 1
+    );
   }
   // SORTING END
 

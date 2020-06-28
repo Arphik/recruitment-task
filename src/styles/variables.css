@@ -1,4 +1,5 @@
 :root {
+  /* COLORS */
   --search__border--color: #6930c3;
   --search__background--color: rgb(255, 255, 255);
   --search__button-glass--color: #6930c3;
@@ -15,4 +16,9 @@
   --header__font--color: #7400b8;
   --row__font--1st-color: #494bcf;
   --row__font--2nd-color: #bbffff;
+
+  /* SIZES */
+  --row__height--header: 10%;
+  --data-rows__height: 90%;
+  --row__height--data: 9%;
 }

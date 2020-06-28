@@ -2,6 +2,7 @@
 @import "./variables.css";
 
 *,
+body,
 :before,
 :after {
   margin: 0;
@@ -18,7 +19,7 @@ body {
 }
 
 .page-wrapper {
-  width: 80vw;
+  width: 90vw;
   margin: 0 auto;
   font-family: "Roboto", sans-serif;
 }
@@ -102,24 +103,29 @@ body {
       width: 40%;
       height: 100%;
     }
-    .change-page{
-        width: 30%;
-        height: 100%;
-        text-align: center;
-        cursor: pointer;
-        span {
-            vertical-align: middle;
-            align-self: center;
-        }
-        &:hover {
-          color: white;
-          background: var(--search__border--color);
-        }
+    .change-page {
+      width: 30%;
+      height: 100%;
+      text-align: center;
+       display: flex;
+      cursor: pointer;
+      span {
+        max-height: 40%;
+        font-size: 1.6rem;
+        margin: 0 auto;
+        align-self: center;
+      }
+      &:hover {
+        color: white;
+        background: var(--search__border--color);
+      }
     }
   }
 } // search form END
 
+
 .content {
+  height: 90vh;
   border: 3px solid var(--content__border--color);
 }
 
@@ -144,21 +150,22 @@ body {
   }
 }
 
+.cell {
+  height: 100%;
+}
 .header,
 .row {
   display: grid;
   grid-template-columns: 6% 23% 23% 17% 15% 16%;
-  .cell {
-    line-height: 16px;
-    align-self: center;
-  }
 }
 .header {
+  height: var(--row__height--header);
   color: var(--header__font--color);
   background: var(--header__background--color);
+  grid-template-rows: 100%;
   .cell {
+    padding-left: 2%;
     text-align: left;
-    height: 6vh;
     border-bottom: 3px solid var(--content__border--color);
     cursor: pointer;
     &:hover {
@@ -171,10 +178,14 @@ body {
     pointer-events: none;
   }
 }
-
+.data-rows{
+  height: var(--data-rows__height);
+}
 .row {
+  height: var(--row__height--data);
   color: var(--row__font--color);
   font-weight: 300;
+  grid-template-rows: 100%;
   &:nth-child(2n-1) {
     background: var(--cell__background--1st-color);
     color: var(--row__font--1st-color);
@@ -184,15 +195,13 @@ body {
     color: var(--row__font--2nd-color);
   }
   .cell {
+    display: flex;
     text-align: center;
+    border-right: 1px solid var(--search__border--color);
+    span {
+      margin: auto;
+    }
   }
-}
-
-.cell {
-  height: 100%;
-  padding: 8px;
-  font-size: 0.75rem;
-  border-right: 1px solid var(--search__border--color);
 }
 
 .hidden-row {
@@ -221,7 +230,7 @@ body {
 @media (max-width: 675px) {
   html,
   body {
-    font-size: 4vw;
+    font-size: 3.5vw;
   }
   .search-form {
     .search__input {
@@ -239,57 +248,26 @@ body {
 
   .content {
     width: 100vw;
+    height: 100vh;
   }
   .header,
   .row {
     grid-template-columns: 7% 22% 22% 17% 15% 17%;
   }
-
-  .header {
-    .cell {
-      height: 9vh;
-    }
-  }
-
-  .ascending,
-  .descending {
-    &:before {
-      width: 20px;
-      height: 20px;
-      left: 2px;
-      bottom: 4px;
-    }
-  }
-}
-
-@media (max-height: 360px) {
-  .search-form {
-    height: 11vh;
-  }
-
-  .header {
-    .cell {
-      height: 17vh;
-    }
-  }
 }
 
 @media (min-width: 676px) and (max-width: 1025px) {
-    .search-form {
-      .search__input {
-        flex: 5;
-        font-size: 1rem;
-      }
-      .search__button {
-        flex: 1;
-      }
-      .pagination {
-        flex: 2;
-        margin-left: 20%;
-      }
+  .search-form {
+    .search__input {
+      flex: 5;
     }
-  .cell {
-    font-size: 1.2rem;
+    .search__button {
+      flex: 1;
+    }
+    .pagination {
+      flex: 2;
+      margin-left: 20%;
+    }
   }
 
   .header,
@@ -297,28 +275,8 @@ body {
     grid-template-columns: 7% 23% 23% 17% 15% 16%;
   }
 
-  .header {
-    .cell {
-      height: 6vh;
-    }
-  }
-  .row {
-    .cell {
-      padding: 10px 0;
-    }
-  }
-
   .pagination {
     margin-left: 0;
-  }
-  .ascending,
-  .descending {
-    &:before {
-      width: 34px;
-      height: 34px;
-      left: 4px;
-      top: 40px;
-    }
   }
 }
 
@@ -336,8 +294,23 @@ body {
       width: 100%;
     }
   }
-
+}
+@media (orientation: landscape) {
   .cell {
-    padding: 4px 2px;
+    font-size: 3vh;
+  }
+
+  @media (max-height: 630px) {
+    .search-form {
+      height: 11vh;
+    }
+    .change-page {
+      font-size: 7vh;
+    }
+  }
+}
+@media (orientation: portrait) {
+  .cell {
+    font-size: 3vw;
   }
 }

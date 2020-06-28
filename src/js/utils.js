@@ -23,6 +23,6 @@ export default class Utils {
     const calc = incomesObjects
       .reduce((prev, curr) => prev + Number(curr.value), 0)
       .toFixed(2);
-    return calc;
+    return Number(calc);
   }
 }
