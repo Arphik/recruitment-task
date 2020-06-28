@@ -70,7 +70,8 @@ export default class CompaniesData {
     /**
      * Search event listener
      */
-    this.searchButton.addEventListener("click", () => {
+    this.searchInput.addEventListener("keyup", () => {
+      this.searchData();
     }); // Search event listeners END
 
     /**
@@ -96,7 +97,8 @@ export default class CompaniesData {
     );
 
     // Pagination event listeners
-    this.prevBtn.addEventListener("click", () => { // Previous page button
+    this.prevBtn.addEventListener("click", () => {
+      // Previous page button
       if (this.paginationSelect.value > 1) {
         const sliced = this.slicedData(
           this.getFilteredData(),
@@ -106,7 +108,8 @@ export default class CompaniesData {
         renderResults(sliced, this.dataRows);
       }
     });
-    this.nextBtn.addEventListener("click", () => { // Next page button
+    this.nextBtn.addEventListener("click", () => {
+      // Next page button
       if (this.paginationSelect.value < this.paginationSelect.length) {
         const sliced = this.slicedData(
           this.getFilteredData(),
@@ -116,7 +119,8 @@ export default class CompaniesData {
         renderResults(sliced, this.dataRows);
       }
     });
-    this.paginationSelect.addEventListener("change", (event) => { // SELECT button
+    this.paginationSelect.addEventListener("change", (event) => {
+      // SELECT button
       const sliced = this.slicedData(
         this.getFilteredData(),
         Number(event.target.value)
@@ -168,7 +172,11 @@ export default class CompaniesData {
    */
   countIncomes(companyIncomes) {
     const sum = this.utils.getTotalIncome(companyIncomes.incomes);
-    const sortedIncomes = this.sortResults("date", false, companyIncomes.incomes);
+    const sortedIncomes = this.sortResults(
+      "date",
+      false,
+      companyIncomes.incomes
+    );
     const lastDate = new Date(sortedIncomes[0].date);
     const lastMonthDate = new Date(lastDate.getFullYear(), lastDate.getMonth());
     const obj = {
@@ -194,7 +202,7 @@ export default class CompaniesData {
     return filteredData.slice(firstRow, lastRow);
   }
 
-  searchData(){
+  searchData() {
     const filteredData = this.filterByKeyword(
       this.searchInput.value,
       this.wholeData
@@ -234,12 +242,17 @@ export default class CompaniesData {
    * @param {array} array Filtered or not data from API
    * @returns {array}
    */
-  sortResults(sortKey, isAscending, array){
+  sortResults(sortKey, isAscending, array) {
     return [...array].sort((a, b) =>
-      a[sortKey] === b[sortKey] ? 0 : 
-      a[sortKey] > b[sortKey] ? 
-        isAscending ? 1 : -1 : 
-        isAscending ? -1 : 1
+      a[sortKey] === b[sortKey]
+        ? 0
+        : a[sortKey] > b[sortKey]
+        ? isAscending
+          ? 1
+          : -1
+        : isAscending
+        ? -1
+        : 1
     );
   }
   // SORTING END
