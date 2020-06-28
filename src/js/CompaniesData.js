@@ -1,5 +1,6 @@
 import Utils from "./Utils";
 import { renderResults, renderPagination } from "./htmlTemplates";
+import { debounce } from 'lodash';
 
 export default class CompaniesData {
   /**
@@ -202,7 +203,7 @@ export default class CompaniesData {
     return filteredData.slice(firstRow, lastRow);
   }
 
-  searchData() {
+  searchData = debounce(() => {
     const filteredData = this.filterByKeyword(
       this.searchInput.value,
       this.wholeData
@@ -210,6 +211,11 @@ export default class CompaniesData {
     this.setFilteredData(filteredData);
     renderResults(this.slicedData(this.filteredData), this.dataRows);
     renderPagination(this.filteredData, this.paginationSelect);
+    this.paginationSelect.value = 1;
+  }, 500);
+
+  changePage(){
+
   }
 
   /**
