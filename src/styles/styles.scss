@@ -107,10 +107,9 @@ body {
       width: 30%;
       height: 100%;
       text-align: center;
-       display: flex;
       cursor: pointer;
       span {
-        max-height: 40%;
+        height: 100%;
         font-size: 1.6rem;
         margin: 0 auto;
         align-self: center;
@@ -230,7 +229,7 @@ body {
 @media (max-width: 675px) {
   html,
   body {
-    font-size: 3.5vw;
+    font-size: 4vw;
   }
   .search-form {
     .search__input {
