@@ -13,38 +13,38 @@
       <form class="search-form">
         <input class="search__input" type="text" placeholder="key words..." />
         <button class="search__button" type="button">
-          <div class="magnifying-glass"></div>
+          <i class="fa fa-search"></i>
         </button>
         <div class="pagination">
-          <div class="change-page previous-page"><span>&lt;</span></div>
+          <div class="change-page previous-page">&lt;</div>
           <select class="pagination__select"></select>
-          <div class="change-page next-page"><span>&gt;</span></div>
+          <div class="change-page next-page">&gt;</div>
         </div>
       </form>
       <div class="content">
         <div class="header">
-          <div data-header-id="id" class="id cell active ascending">
+          <div data-header-id="id" class="id data__cell--header active ascending">
             Id <i class="fa fa-sort-amount-asc hidden"></i>
           </div>
-          <div data-header-id="name" class="name cell">
+          <div data-header-id="name" class="name data__cell--header">
             Name <i class="fa fa-sort-amount-asc hidden"></i>
           </div>
-          <div data-header-id="city" class="city cell">
+          <div data-header-id="city" class="city data__cell--header">
             City <i class="fa fa-sort-amount-asc hidden"></i>
           </div>
-          <div data-header-id="totalIncome" class="total-income cell">
+          <div data-header-id="totalIncome" class="total-income data__cell--header">
             Total Income <i class="fa fa-sort-amount-asc hidden"></i>
           </div>
-          <div data-header-id="averageIncome" class="average-income cell">
+          <div data-header-id="averageIncome" class="average-income data__cell--header">
             Average Income <i class="fa fa-sort-amount-asc hidden"></i>
           </div>
-          <div data-header-id="lastIncome" class="last-income cell">
+          <div data-header-id="lastMonthIncomes" class="last-income data__cell--header">
             Last Month Incomes <i class="fa fa-sort-amount-asc hidden"></i>
           </div>
         </div>
-        <div class="data-rows">
+        <div class="data">
           <div class="loading">
-            <i class="fa fa-refresh"></i>
+            <i class="fa fa-hourglass-half"></i>
             <p>We are catching data, thank you for patience</p>
           </div>
         </div>

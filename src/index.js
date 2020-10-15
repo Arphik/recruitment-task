@@ -1,5 +1,5 @@
-import _ from "lodash";
-import CompaniesData from "./js/CompaniesData";
+// import _ from "lodash";
 import "./styles/styles.scss";
+import UserFunctions from "./js/UserFunctions";
 
-window.addEventListener("DOMContentLoaded", () => new CompaniesData());
+window.addEventListener("DOMContentLoaded", () => new UserFunctions());

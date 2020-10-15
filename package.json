@@ -4,9 +4,10 @@
   "description": "Documentation:",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --port 4204",
     "build": "webpack --config webpack.config.js",
-    "doc": "jsdoc -c jsdoc.json"
+    "doc": "jsdoc -c jsdoc.json",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -20,16 +21,20 @@
   },
   "homepage": "https://github.com/Arphik/recruitment-task#readme",
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/preset-env": "^7.10.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "babel-core": "^6.26.3",
+    "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.0.1",
     "jsdoc": "^3.6.4",
+    "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
@@ -40,6 +45,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "@fortawesome/fontawesome-free": "^5.15.1",
+    "babel-runtime": "^6.26.0"
   }
 }
