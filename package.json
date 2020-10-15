@@ -1,7 +1,7 @@
 {
-  "name": "recruitment-skygate",
+  "name": "webpack-template",
   "version": "1.0.0",
-  "description": "Documentation:",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --port 4204",
@@ -9,17 +9,8 @@
     "doc": "jsdoc -c jsdoc.json",
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Arphik/recruitment-task.git"
-  },
-  "keywords": [],
-  "author": "",
+  "author": "Arphik",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Arphik/recruitment-task/issues"
-  },
-  "homepage": "https://github.com/Arphik/recruitment-task#readme",
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
@@ -28,7 +19,8 @@
     "babel-core": "^6.26.3",
     "babel-jest": "^26.0.1",
     "babel-loader": "^8.1.0",
-    "css-loader": "^3.5.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.6.0",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",

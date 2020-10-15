@@ -1,18 +1,9 @@
-Companies API
+# recruitment-task
 
+Application was made to prove my knowledge as frontend developer.
 
-Application show companies data from API (id, name, city, total incomes, average income, incomes from last month) in table. 
-Additional it can sort content by each column at a time by clicking corresponding button in table header(second click by ascending), search through every field. 
-    Application works also on mobile devices.
+Link to working application:
+https://arphik.github.io/recruitment-task/dist/
 
-Folder structure:
-Repo has three main folders ,
-    in src there is a code in development, 
-    dosc contains documentation in jsdoc format, 
-    dist already built and updated application ready to use
-    (https://arphik.github.io/recruitment-task/dist/)
-
-
-
-The rest of documentation is in form of comments in code, and in address:
-https://arphik.github.io/recruitment-task/docs/
+Documentation:
+https://arphik.github.io/recruitment-task/docs/global.html#addEventsListeners

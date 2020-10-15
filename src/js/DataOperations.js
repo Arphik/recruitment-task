@@ -31,13 +31,23 @@ import {countIncomes} from './DataCalculations';
 //       });
 //   }
 
-  export const fetchData = async () => {
-      const response = await connectToOrigin("https://recruitment.hal.skygate.io/companies");
+  export const fetchData = async (url) => {
+    try {
+      const response = await connectToOrigin(url);
       const companies = await response.json();
+
+      return companies;
+    } catch (error) {
+      console.log(`There was an error in fetching ${url}:`);
+      throw error;
+    }
+  }
+
+  export const mergeData = async () => {
+    const companies = await fetchData("https://recruitment.hal.skygate.io/companies");
       // calculate total, average and last income
       return Promise.all(companies.map(async (company) => {
-        const response = await connectToOrigin(`https://recruitment.hal.skygate.io/incomes/${company.id}`);
-        const companyIncomes = await response.json();
+        const companyIncomes = await fetchData(`https://recruitment.hal.skygate.io/incomes/${company.id}`);
 
         return{
             ...company,

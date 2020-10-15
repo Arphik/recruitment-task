@@ -1,6 +1,6 @@
 
 import {renderResults, renderPagination} from './RenderingFunctions';
-import {fetchData, sortResults,  sliceData} from './DataOperations';
+import {mergeData, sortResults,  sliceData} from './DataOperations';
 import UserFunctions from './UserFunctions';
 
 export default class CompaniesData {
@@ -35,7 +35,7 @@ export default class CompaniesData {
    * It also render pagination and add event listeners to static elements
    */
   init() {
-    fetchData().then((data) => {
+    mergeData().then((data) => {
       this.setWholeData(data);
       this.setFilteredData(data);
       const sorted = sortResults("id", true, this.wholeData);
