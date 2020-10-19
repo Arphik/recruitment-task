@@ -123,15 +123,10 @@ body {
   padding: 10px;
   margin: 0 auto;
   text-align: center;
-  .loading__image {
-    width: 50%;
-    height: 55%;
-    display: inline-block;
-    background: url("../assets/images/catching-data.png") no-repeat center/cover;
-  }
-  i {
+  .fa-refresh {
     font-size: 6rem;
     padding: 30px 0;
+    animation: rotating 2s linear infinite;
   }
   p {
     margin: 4px;
@@ -320,5 +315,14 @@ body {
   }
   .data__cell--content, .data__cell--header {
     font-size: 3vw;
+  }
+}
+
+@-webkit-keyframes rotating {
+  from{
+      -webkit-transform: rotate(0deg);
+  }
+  to{
+      -webkit-transform: rotate(360deg);
   }
 }

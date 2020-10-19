@@ -36,13 +36,18 @@ export default class CompaniesData {
    */
   init() {
     mergeData().then((data) => {
+
       this.setWholeData(data);
       this.setFilteredData(data);
+      
       const sorted = sortResults("id", true, this.wholeData);
       const sliced = sliceData(sorted);
+
       renderResults(sliced);
       renderPagination(this.getWholeData());
+
       console.log('INIT DATA', this.getWholeData());
+
     });
   }
 }
